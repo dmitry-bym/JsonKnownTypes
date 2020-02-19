@@ -1,4 +1,4 @@
-# JsonKnownType .Net Standard
+# JsonKnownTypes .Net Standard
 Help to serialize and deserialize polymorphic types. Add distractor to json data
 
 - [Documentation](#Documentation)
