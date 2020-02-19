@@ -47,6 +47,7 @@ For change default discriminator settings use:
 ```c#
   var entityJson = JsonConvert.SerializeObject(entity, new JsonKnownTypeConverter<BaseClass>());
 ```
+> Just if you don't use `JsonConvert` attribute
 ## License
 
 Authored by: Dmitry Kaznacheev (dmitry-bym)
