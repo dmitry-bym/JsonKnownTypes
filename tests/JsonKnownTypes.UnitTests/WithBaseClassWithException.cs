@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AutoFixture.NUnit3;
-using FluentAssertions;
+﻿using AutoFixture.NUnit3;
 using JsonKnownTypes.Attributes;
 using JsonKnownTypes.Exceptions;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
-namespace JsonKnownTypes.Tests
+namespace JsonKnownTypes.UnitTests
 {
     class WithBaseClassWithException
     {

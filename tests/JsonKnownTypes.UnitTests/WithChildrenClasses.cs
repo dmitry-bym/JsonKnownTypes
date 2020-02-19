@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
-namespace JsonKnownTypes.Tests
+namespace JsonKnownTypes.UnitTests
 {
     public class WithChildrenClasses
     {

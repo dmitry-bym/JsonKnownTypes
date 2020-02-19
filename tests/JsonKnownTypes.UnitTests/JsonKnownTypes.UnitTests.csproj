@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JsonKnownTypes\JsonKnownTypes.csproj" />
+    <ProjectReference Include="..\..\src\JsonKnownTypes\JsonKnownTypes.csproj" />
   </ItemGroup>
 
 </Project>
