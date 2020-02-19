@@ -34,6 +34,12 @@ By default for discriminattor property using `"$type"` name, if you need to chan
   
   public class BaseAbstractClass2Heir : BaseClass  { ... }
 ```
+
+Serialization and Deserialization:
+```c#
+  var entityJson = JsonConvert.SerializeObject(entity);
+  var obj = DeserializeObject<BaseClass>(entityJson)
+```
 ### Configuration
 For change default discriminator settings use:
 ```c#
@@ -43,11 +49,20 @@ For change default discriminator settings use:
     AutoJsonKnownType = false
   };
 ```
-### Use Manualy 
+> If `AutoJsonKnownType` is false you should to add `JsonKnownType` attribute for relatives classes manualy
+### Use manualy
 ```c#
-  var entityJson = JsonConvert.SerializeObject(entity, new JsonKnownTypeConverter<BaseClass>());
+  public class BaseClass { ... }
+  public class BaseAbstractClass1Heir : BaseClass  { ... }
+  public class BaseAbstractClass2Heir : BaseClass  { ... }
 ```
-> Just if you don't use `JsonConvert` attribute
+```c#
+  var converter = new JsonKnownTypeConverter<BaseClass>()
+  
+  var entityJson = JsonConvert.SerializeObject(entity, converter);
+  var obj = DeserializeObject<BaseClass>(entityJson, converter)
+```
+> Need to add converter to method just if you don't use `JsonConvert` attribute
 ## License
 
 Authored by: Dmitry Kaznacheev (dmitry-bym)
