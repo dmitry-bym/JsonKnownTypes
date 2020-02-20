@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace JsonKnownTypes.Attributes
+namespace JsonKnownTypes
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
     public class JsonKnownDiscriminatorAttribute : Attribute

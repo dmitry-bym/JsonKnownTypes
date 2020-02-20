@@ -1,6 +1,5 @@
 using AutoFixture.NUnit3;
 using FluentAssertions;
-using JsonKnownTypes.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;

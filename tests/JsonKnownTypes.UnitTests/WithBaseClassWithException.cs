@@ -1,5 +1,4 @@
 ﻿using AutoFixture.NUnit3;
-using JsonKnownTypes.Attributes;
 using JsonKnownTypes.Exceptions;
 using Newtonsoft.Json;
 using NUnit.Framework;

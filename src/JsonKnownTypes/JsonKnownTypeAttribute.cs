@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace JsonKnownTypes.Attributes
+namespace JsonKnownTypes
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = true)]
     public class JsonKnownTypeAttribute : Attribute

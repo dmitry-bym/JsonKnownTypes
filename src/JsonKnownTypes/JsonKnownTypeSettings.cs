@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace JsonKnownTypes.Attributes
+namespace JsonKnownTypes
 {
     public class JsonKnownTypeSettings
     {
