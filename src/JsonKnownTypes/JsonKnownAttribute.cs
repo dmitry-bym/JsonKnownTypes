@@ -3,18 +3,18 @@
 namespace JsonKnownTypes
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = true)]
-    public class JsonKnownTypeAttribute : Attribute
+    public class JsonKnownAttribute : Attribute
     {
         public Type Type { get; }
         public string Discriminator { get; }
 
-        public JsonKnownTypeAttribute(Type type)
+        public JsonKnownAttribute(Type type)
         {
             Type = type;
             Discriminator = type.Name;
         }
 
-        public JsonKnownTypeAttribute(Type type, string discriminator)
+        public JsonKnownAttribute(Type type, string discriminator)
         {
             Type = type;
             Discriminator = discriminator;

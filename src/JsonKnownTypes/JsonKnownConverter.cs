@@ -4,22 +4,22 @@ using Newtonsoft.Json.Linq;
 
 namespace JsonKnownTypes
 {
-    public class JsonKnownTypeConverter<T> : JsonConverter
+    public class JsonKnownConverter<T> : JsonConverter
     {
-        private JsonKnownTypeSettings Settings { get; }
+        private JsonKnownSettings Settings { get; }
 
         private JsonSerializerSettings SpecifiedSubclassConversion
         {
             get =>
                 new JsonSerializerSettings
                 {
-                    ContractResolver = new JsonKnownTypeContractResolver<T>()
+                    ContractResolver = new JsonKnownContractResolver<T>()
                 };
         }
 
-        public JsonKnownTypeConverter()
+        public JsonKnownConverter()
         {
-            Settings = JsonKnownSettingsService.GetSettings<T>();
+            Settings = JsonKnownSettingsManager.GetSettings<T>();
         }
 
         public override bool CanConvert(Type objectType)

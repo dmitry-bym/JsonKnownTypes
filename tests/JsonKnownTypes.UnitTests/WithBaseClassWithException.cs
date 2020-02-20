@@ -37,11 +37,11 @@ namespace JsonKnownTypes.UnitTests
         }
     }
 
-    [JsonConverter(typeof(JsonKnownTypeConverter<BaseClassSameDiscriminator>))]
-    [JsonKnownType(typeof(BaseClassSameDiscriminator))]
-    [JsonKnownType(typeof(BaseClassSameDiscriminator1Heir), "same name")]
-    [JsonKnownType(typeof(BaseClassSameDiscriminator2Heir), "same name")]
-    [JsonKnownType(typeof(BaseClassSameDiscriminator3Heir), "same name")]
+    [JsonConverter(typeof(JsonKnownConverter<BaseClassSameDiscriminator>))]
+    [JsonKnown(typeof(BaseClassSameDiscriminator))]
+    [JsonKnown(typeof(BaseClassSameDiscriminator1Heir), "same name")]
+    [JsonKnown(typeof(BaseClassSameDiscriminator2Heir), "same name")]
+    [JsonKnown(typeof(BaseClassSameDiscriminator3Heir), "same name")]
     public class BaseClassSameDiscriminator
     {
         public string Summary { get; set; }

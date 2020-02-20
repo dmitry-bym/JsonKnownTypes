@@ -33,10 +33,10 @@ namespace JsonKnownTypes.UnitTests
         }
     }
 
-    [JsonConverter(typeof(JsonKnownTypeConverter<BaseAbstractClass>))]
-    [JsonKnownDiscriminator(Name = "type")]
-    [JsonKnownType(typeof(BaseAbstractClass1Heir))]
-    [JsonKnownType(typeof(BaseAbstractClass2Heir))]
+    [JsonConverter(typeof(JsonKnownConverter<BaseAbstractClass>))]
+    [JsonDiscriminator(Name = "type")]
+    [JsonKnown(typeof(BaseAbstractClass1Heir))]
+    [JsonKnown(typeof(BaseAbstractClass2Heir))]
     public abstract class BaseAbstractClass
     {
         public string Summary { get; set; }

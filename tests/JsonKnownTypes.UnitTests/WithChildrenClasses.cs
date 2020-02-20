@@ -38,16 +38,16 @@ namespace JsonKnownTypes.UnitTests
         }
     }
 
-    [JsonConverter(typeof(JsonKnownTypeConverter<ParentClass>))]
-    [JsonKnownType(typeof(ParentClass), "parentclass")]
-    [JsonKnownType(typeof(ParentClass1Heir), "parentclass1heir")]
-    [JsonKnownType(typeof(ParentClass2Heir), "parentclass2heir")]
+    [JsonConverter(typeof(JsonKnownConverter<ParentClass>))]
+    [JsonKnown(typeof(ParentClass), "parentclass")]
+    [JsonKnown(typeof(ParentClass2Heir), "parentclass2heir")]
     public class ParentClass
     {
         public string Summary { get; set; }
         public ChildClass2Heir Child { get; set; }
     }
 
+    [JsonKnownThis("parentclass1heir")]
     public class ParentClass1Heir : ParentClass
     {
         public int SomeInt { get; set; }
@@ -61,10 +61,10 @@ namespace JsonKnownTypes.UnitTests
         ChildClass Child2 { get; set; }
     }
 
-    [JsonConverter(typeof(JsonKnownTypeConverter<ChildClass>))]
-    [JsonKnownType(typeof(ChildClass), "childclass")]
-    [JsonKnownType(typeof(ChildClass1Heir), "childclass1heir")]
-    [JsonKnownType(typeof(ChildClass2Heir), "childclass2heir")]
+    [JsonConverter(typeof(JsonKnownConverter<ChildClass>))]
+    [JsonKnown(typeof(ChildClass), "childclass")]
+    [JsonKnown(typeof(ChildClass1Heir), "childclass1heir")]
+    [JsonKnown(typeof(ChildClass2Heir), "childclass2heir")]
     public class ChildClass
     {
         public string Summary { get; set; }

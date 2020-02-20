@@ -1,6 +1,5 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
-using JsonKnownTypes.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -33,12 +32,12 @@ namespace JsonKnownTypes.UnitTests
 
         private void There_is_right_discriminator(BaseClass entity)
         {
-            JsonKnownSettingsService.DiscriminatorAttribute = new JsonKnownDiscriminatorAttribute
+            JsonKnownSettingsManager.DiscriminatorSettings = new JsonDiscriminatorSettings
             {
                 Name = "type"
             };
 
-            var a = JsonConvert.SerializeObject(entity, new JsonKnownTypeConverter<BaseClass>());
+            var a = JsonConvert.SerializeObject(entity, new JsonKnownConverter<BaseClass>());
 
             var json = JsonConvert.SerializeObject(entity);
             var jObject = JToken.Parse(json);
@@ -51,7 +50,7 @@ namespace JsonKnownTypes.UnitTests
         }
     }
 
-    [JsonConverter(typeof(JsonKnownTypeConverter<BaseClass>))]
+    [JsonConverter(typeof(JsonKnownConverter<BaseClass>))]
     public class BaseClass
     {
         public string Summary { get; set; }

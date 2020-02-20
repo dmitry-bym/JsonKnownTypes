@@ -2,7 +2,7 @@
 
 namespace JsonKnownTypes.Exceptions
 {
-    public class AttributeArgumentException : ArgumentException
+    public class AttributeArgumentException : ArgumentException //todo made cool exceptions
     {
         private string AttributeName { get; }
 
