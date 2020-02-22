@@ -9,7 +9,7 @@ namespace JsonKnownTypes
     {
         public static void AddJsonKnown<T>(this Dictionary<Type, string> dictionary)
         {
-            var attrs = AttributeManager.GetJsonKnownAttributes(typeof(T));
+            var attrs = AttributesManager.GetJsonKnownAttributes(typeof(T));
             foreach (var attr in attrs)
             {
                 var discriminator = attr.Discriminator ?? attr.Type.Name;
@@ -21,7 +21,7 @@ namespace JsonKnownTypes
         {
             foreach (var type in inherited)
             {
-                var attr = AttributeManager.GetJsonKnownThisAttribute(type);
+                var attr = AttributesManager.GetJsonKnownThisAttribute(type);
                 if (attr != null)
                 {
                     var discriminator = attr.Discriminator ?? type.Name;

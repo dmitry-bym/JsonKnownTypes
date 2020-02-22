@@ -11,7 +11,7 @@ namespace JsonKnownTypes
         
         public static JsonKnownTypesSettings GetSettings<T>()
         {
-            var discriminatorAttribute = AttributeManager.GetJsonDiscriminatorAttribute(typeof(T));
+            var discriminatorAttribute = AttributesManager.GetJsonDiscriminatorAttribute(typeof(T));
             
             var discriminatorSettings = discriminatorAttribute == null ? DefaultDiscriminatorSettings : Mapper.Map(discriminatorAttribute);
             
