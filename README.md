@@ -20,6 +20,11 @@ There is simple way to use just add one attribute to base class or interface
   {
     public string Summary { get; set; }
   }
+  
+  public class ChildClass : BaseClass
+  {
+    public string Detailed { get; set; }
+  }
 ```
 Serialization and Deserialization:
 ```c#
@@ -29,6 +34,7 @@ Serialization and Deserialization:
 Json representation:
 ```json
 { "Summary":"someValue", "$type":"BaseClass" }
+{ "Summary":"someValue", "Detailed":"someValue", "$type":"ChildClass" }
 ```
 ### JsonKnownType
 If you need to add custom discriminator just use `JsonKnowType` attribute.  
