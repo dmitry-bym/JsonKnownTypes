@@ -20,7 +20,7 @@ There is simple way to use just add one attribute to base class or interface
     public string Summary { get; set; }
   }
 ```
-#### Serialization and Deserialization:
+Serialization and Deserialization:
 ```c#
   var entityJson = JsonConvert.SerializeObject(entity);
   var obj = DeserializeObject<BaseClass>(entityJson)
