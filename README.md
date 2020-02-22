@@ -1,5 +1,5 @@
 # JsonKnownTypes .Net Standard
-[![lisence](https://img.shields.io/badge/nuget-v0.1.0-orange?logo=nuget&style=flat-square)](https://www.nuget.org/packages/JsonKnownTypes/)
+[![lisence](https://img.shields.io/badge/nuget-v0.2.0-orange?logo=nuget&style=flat-square)](https://www.nuget.org/packages/JsonKnownTypes/)
 
 Help to serialize and deserialize polymorphic types. Add distractor to json data
 
