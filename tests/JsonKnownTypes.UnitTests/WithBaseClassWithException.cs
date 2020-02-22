@@ -1,10 +1,12 @@
-﻿using AutoFixture.NUnit3;
+﻿using System;
+using AutoFixture.NUnit3;
 using JsonKnownTypes.Exceptions;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace JsonKnownTypes.UnitTests
 {
+    [TestFixture]
     class WithBaseClassWithException
     {
         private static string DiscriminatorName { get => "$type"; }
@@ -31,13 +33,14 @@ namespace JsonKnownTypes.UnitTests
 
         private void Should_throw_exception(BaseClassSameDiscriminator entity)
         {
-            var json = new TestDelegate(() => JsonConvert.SerializeObject(entity));
-
-            Assert.Throws<AttributeArgumentException>(json);
+            Assert.Throws<JsonException>(delegate
+            {
+                JsonConvert.SerializeObject(entity);
+            });
         }
     }
 
-    [JsonConverter(typeof(JsonKnownTypeConverter<BaseClassSameDiscriminator>))]
+    [JsonConverter(typeof(JsonKnownTypesConverter<BaseClassSameDiscriminator>))]
     [JsonKnownType(typeof(BaseClassSameDiscriminator))]
     [JsonKnownType(typeof(BaseClassSameDiscriminator1Heir), "same name")]
     [JsonKnownType(typeof(BaseClassSameDiscriminator2Heir), "same name")]

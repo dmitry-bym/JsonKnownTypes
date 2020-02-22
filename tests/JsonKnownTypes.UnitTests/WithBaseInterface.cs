@@ -34,8 +34,7 @@ namespace JsonKnownTypes.UnitTests
         }
     }
 
-    [JsonConverter(typeof(JsonKnownTypeConverter<IBaseInterface>))]
-    [JsonKnownType(typeof(BaseInterface1Heir))]
+    [JsonConverter(typeof(JsonKnownTypesConverter<IBaseInterface>))]
     [JsonKnownType(typeof(BaseInterface2Heir))]
     public interface IBaseInterface
     {

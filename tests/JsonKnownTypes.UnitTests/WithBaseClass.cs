@@ -1,12 +1,12 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
-using JsonKnownTypes.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
 namespace JsonKnownTypes.UnitTests
 {
+    [TestFixture]
     public class WithBaseClass
     {
         private static string DiscriminatorName { get => "type"; }
@@ -33,13 +33,6 @@ namespace JsonKnownTypes.UnitTests
 
         private void There_is_right_discriminator(BaseClass entity)
         {
-            JsonKnownSettingsService.DiscriminatorAttribute = new JsonKnownDiscriminatorAttribute
-            {
-                Name = "type"
-            };
-
-            var a = JsonConvert.SerializeObject(entity, new JsonKnownTypeConverter<BaseClass>());
-
             var json = JsonConvert.SerializeObject(entity);
             var jObject = JToken.Parse(json);
 
@@ -49,25 +42,39 @@ namespace JsonKnownTypes.UnitTests
             obj.Should().BeEquivalentTo(entity);
             Assert.AreEqual(discriminator, entity.GetType().Name);
         }
+
+        [Test]
+        public void Settings_are_correct()
+        {
+            var settings = JsonKnownTypesSettingsManager.GetSettings<BaseClass>();
+
+            Assert.True(settings.TypeToDiscriminator.Count == 4);
+            Assert.AreEqual(settings.Name, DiscriminatorName);
+        }
     }
 
-    [JsonConverter(typeof(JsonKnownTypeConverter<BaseClass>))]
+    [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
+    [JsonDiscriminator(AutoJson = false, Name = "type")]
+    [JsonKnownThisType]
     public class BaseClass
     {
         public string Summary { get; set; }
     }
 
+    [JsonKnownThisType]
     public class BaseClass1Heir : BaseClass
     {
         public int SomeInt { get; set; }
     }
 
+    [JsonKnownThisType]
     public class BaseClass2Heir : BaseClass
     {
         public double SomeDouble { get; set; }
         public string Detailed { get; set; }
     }
 
+    [JsonKnownThisType]
     public class BaseClass3Heir : BaseClass2Heir
     {
         public string SomeString { get; set; }

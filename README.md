@@ -14,18 +14,27 @@ Help to serialize and deserialize polymorphic types. Add distractor to json data
 ### Getting started
 There is simple way to use just add one attribute to base class or interface
 ```c#
-  [JsonConverter(typeof(JsonKnownTypeConverter<BaseClass>))]
+  [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
   public class BaseClass
   {
     public string Summary { get; set; }
   }
 ```
-
+Serialization and Deserialization:
+```c#
+  var entityJson = JsonConvert.SerializeObject(entity);
+  var obj = DeserializeObject<BaseClass>(entityJson)
+```
+Json representation:
+```json
+{ "Summary":"someValue", "$type":"BaseClass" }
+```
+### JsonKnownType
 If you need to add custom discriminator just use `JsonKnowType` attribute.  
 By default for discriminattor property using `"$type"` name, if you need to change it use `JsonKnownDiscriminator` attribute. 
 ```c#
-  [JsonConverter(typeof(JsonKnownTypeConverter<BaseClass>))]
-  [JsonKnownDiscriminator(Name = "myType")] //add custom discriminator name
+  [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
+  [JsonDiscriminator(Name = "myType")] //add custom discriminator name
   [JsonKnownType(typeof(BaseClass1Heir))] //could be deleted if you didn't turn off AutoJsonKnownType
   [JsonKnownType(typeof(BaseClass2Heir), "myDiscriminator")]
   public class BaseClass { ... }
@@ -34,22 +43,47 @@ By default for discriminattor property using `"$type"` name, if you need to chan
   
   public class BaseAbstractClass2Heir : BaseClass  { ... }
 ```
+Json representation:
+```
+{ ... , "myType":"BaseClass" }
 
-Serialization and Deserialization:
+{ ... , "myType":"BaseClass1Heir" }
+
+{ ... , "myType":"myDiscriminator" }
+```
+### JsonKnownThisType
+Add discriminator for type which is used with it
 ```c#
-  var entityJson = JsonConvert.SerializeObject(entity);
-  var obj = DeserializeObject<BaseClass>(entityJson)
+  [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
+  [JsonKnownThisType("do_you_know_that")]
+  public class BaseClass { ... }
+  
+  [JsonKnownThisType("html_is_programming_language")]
+  public class BaseAbstractClass1Heir : BaseClass  { ... }
+  
+  [JsonKnownThisType("just_joke=)")]
+  public class BaseAbstractClass2Heir : BaseClass  { ... }
+```
+Json representation:
+```
+{ ... , "$type":"do_you_know_that" }
+
+{ ... , "$type":"html_is_programming_language" }
+
+{ ... , "$type":"just_joke=)" }
 ```
 ### Configuration
 For change default discriminator settings use:
 ```c#
-  JsonKnownSettingsService.DiscriminatorAttribute = new JsonKnownDiscriminatorAttribute
+  JsonKnownTypesSettingsManager.DefaultDiscriminatorSettings = new JsonDiscriminatorSettings
   {
-    Name = "type",
-    AutoJsonKnownType = false
+    Name = "name",
+    AutoJsonKnown = false
   };
 ```
-> If `AutoJsonKnownType` is false you should to add `JsonKnownType` attribute for relatives classes manualy
+> Name change default `"$type"` name to yours  
+
+> If `AutoJsonKnownType` is false you should to add `JsonKnownType` or `JsonKnownThisType` attribute for each relative class manualy or it throw an Exception
 ### Use manualy
 ```c#
   public class BaseClass { ... }
@@ -57,7 +91,7 @@ For change default discriminator settings use:
   public class BaseAbstractClass2Heir : BaseClass  { ... }
 ```
 ```c#
-  var converter = new JsonKnownTypeConverter<BaseClass>()
+  var converter = new JsonKnownTypesConverter<BaseClass>()
   
   var entityJson = JsonConvert.SerializeObject(entity, converter);
   var obj = DeserializeObject<BaseClass>(entityJson, converter)

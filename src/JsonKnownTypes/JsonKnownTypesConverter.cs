@@ -4,26 +4,22 @@ using Newtonsoft.Json.Linq;
 
 namespace JsonKnownTypes
 {
-    public class JsonKnownTypeConverter<T> : JsonConverter
+    public class JsonKnownTypesConverter<T> : JsonConverter
     {
-        private JsonKnownTypeSettings Settings { get; }
+        private readonly JsonKnownTypesSettings _typesSettings 
+            = JsonKnownTypesSettingsManager.GetSettings<T>();
 
         private JsonSerializerSettings SpecifiedSubclassConversion
         {
             get =>
                 new JsonSerializerSettings
                 {
-                    ContractResolver = new JsonKnownTypeContractResolver<T>()
+                    ContractResolver = new JsonKnownTypesContractResolver<T>()
                 };
         }
-
-        public JsonKnownTypeConverter()
-        {
-            Settings = JsonKnownSettingsService.GetSettings<T>();
-        }
-
+        
         public override bool CanConvert(Type objectType)
-            => Settings.TypeToDiscriminator.ContainsKey(objectType);
+            => _typesSettings.TypeToDiscriminator.ContainsKey(objectType);
 
         public override bool CanWrite { get => true; }
 
@@ -31,9 +27,9 @@ namespace JsonKnownTypes
         {
             var jo = JObject.Load(reader);
 
-            var discriminator = jo[Settings.Name].ToString();
+            var discriminator = jo[_typesSettings.Name].ToString();
 
-            if(Settings.DiscriminatorToType.TryGetValue(discriminator, out var typeForObject))
+            if(_typesSettings.DiscriminatorToType.TryGetValue(discriminator, out var typeForObject))
                 return JsonConvert.DeserializeObject(jo.ToString(), typeForObject, SpecifiedSubclassConversion);
 
             throw new NotImplementedException();
@@ -42,11 +38,11 @@ namespace JsonKnownTypes
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var objectType = value.GetType();
-            if (Settings.TypeToDiscriminator.TryGetValue(objectType, out var discriminator))
+            if (_typesSettings.TypeToDiscriminator.TryGetValue(objectType, out var discriminator))
             {
                 var json = JsonConvert.SerializeObject(value, SpecifiedSubclassConversion);
                 var jo = JObject.Parse(json);
-                jo.Add(Settings.Name, new JValue(discriminator));
+                jo.Add(_typesSettings.Name, new JValue(discriminator));
                 jo.WriteTo(writer);
             }
             else

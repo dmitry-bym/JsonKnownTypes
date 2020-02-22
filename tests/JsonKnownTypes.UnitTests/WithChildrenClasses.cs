@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 namespace JsonKnownTypes.UnitTests
 {
+    [TestFixture]
     public class WithChildrenClasses
     {
         private static string DiscriminatorName { get => "$type"; }
@@ -36,11 +37,19 @@ namespace JsonKnownTypes.UnitTests
             obj.Should().BeEquivalentTo(entity);
             Assert.AreEqual(discriminator, entity.GetType().Name.ToLower());
         }
+
+        [Test]
+        public void Settings_are_correct()
+        {
+            var settings = JsonKnownTypesSettingsManager.GetSettings<ParentClass>();
+
+            Assert.True(settings.TypeToDiscriminator.Count == 3);
+            Assert.AreEqual(settings.Name, DiscriminatorName);
+        }
     }
 
-    [JsonConverter(typeof(JsonKnownTypeConverter<ParentClass>))]
+    [JsonConverter(typeof(JsonKnownTypesConverter<ParentClass>))]
     [JsonKnownType(typeof(ParentClass), "parentclass")]
-    [JsonKnownType(typeof(ParentClass1Heir), "parentclass1heir")]
     [JsonKnownType(typeof(ParentClass2Heir), "parentclass2heir")]
     public class ParentClass
     {
@@ -48,6 +57,7 @@ namespace JsonKnownTypes.UnitTests
         public ChildClass2Heir Child { get; set; }
     }
 
+    [JsonKnownThisType("parentclass1heir")]
     public class ParentClass1Heir : ParentClass
     {
         public int SomeInt { get; set; }
@@ -61,7 +71,7 @@ namespace JsonKnownTypes.UnitTests
         ChildClass Child2 { get; set; }
     }
 
-    [JsonConverter(typeof(JsonKnownTypeConverter<ChildClass>))]
+    [JsonConverter(typeof(JsonKnownTypesConverter<ChildClass>))]
     [JsonKnownType(typeof(ChildClass), "childclass")]
     [JsonKnownType(typeof(ChildClass1Heir), "childclass1heir")]
     [JsonKnownType(typeof(ChildClass2Heir), "childclass2heir")]

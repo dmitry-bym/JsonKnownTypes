@@ -11,7 +11,6 @@ namespace JsonKnownTypes
         public JsonKnownTypeAttribute(Type type)
         {
             Type = type;
-            Discriminator = type.Name;
         }
 
         public JsonKnownTypeAttribute(Type type, string discriminator)
