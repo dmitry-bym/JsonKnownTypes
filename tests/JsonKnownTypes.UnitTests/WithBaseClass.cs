@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 namespace JsonKnownTypes.UnitTests
 {
+    [TestFixture]
     public class WithBaseClass
     {
         private static string DiscriminatorName { get => "type"; }
@@ -32,13 +33,6 @@ namespace JsonKnownTypes.UnitTests
 
         private void There_is_right_discriminator(BaseClass entity)
         {
-            JsonKnownSettingsManager.DiscriminatorSettings = new JsonDiscriminatorSettings
-            {
-                Name = "type"
-            };
-
-            var a = JsonConvert.SerializeObject(entity, new JsonKnownConverter<BaseClass>());
-
             var json = JsonConvert.SerializeObject(entity);
             var jObject = JToken.Parse(json);
 
@@ -48,25 +42,39 @@ namespace JsonKnownTypes.UnitTests
             obj.Should().BeEquivalentTo(entity);
             Assert.AreEqual(discriminator, entity.GetType().Name);
         }
+
+        [Test]
+        public void Settings_are_correct()
+        {
+            var settings = JsonKnownTypesSettingsManager.GetSettings<BaseClass>();
+
+            Assert.True(settings.TypeToDiscriminator.Count == 4);
+            Assert.AreEqual(settings.Name, DiscriminatorName);
+        }
     }
 
-    [JsonConverter(typeof(JsonKnownConverter<BaseClass>))]
+    [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
+    [JsonDiscriminator(AutoJson = false, Name = "type")]
+    [JsonKnownThisType]
     public class BaseClass
     {
         public string Summary { get; set; }
     }
 
+    [JsonKnownThisType]
     public class BaseClass1Heir : BaseClass
     {
         public int SomeInt { get; set; }
     }
 
+    [JsonKnownThisType]
     public class BaseClass2Heir : BaseClass
     {
         public double SomeDouble { get; set; }
         public string Detailed { get; set; }
     }
 
+    [JsonKnownThisType]
     public class BaseClass3Heir : BaseClass2Heir
     {
         public string SomeString { get; set; }

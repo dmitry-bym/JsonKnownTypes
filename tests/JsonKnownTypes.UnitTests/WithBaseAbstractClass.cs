@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 namespace JsonKnownTypes.UnitTests
 {
+    [TestFixture]
     public class WithBaseAbstractClass
     {
         private static string DiscriminatorName { get => "type"; }
@@ -31,12 +32,21 @@ namespace JsonKnownTypes.UnitTests
             obj.Should().BeEquivalentTo(entity);
             Assert.AreEqual(discriminator, entity.GetType().Name);
         }
+
+        [Test]
+        public void Settings_are_correct()
+        {
+            var settings = JsonKnownTypesSettingsManager.GetSettings<BaseAbstractClass>();
+
+            Assert.True(settings.TypeToDiscriminator.Count == 2);
+            Assert.AreEqual(settings.Name, DiscriminatorName);
+        }
     }
 
-    [JsonConverter(typeof(JsonKnownConverter<BaseAbstractClass>))]
+    [JsonConverter(typeof(JsonKnownTypesConverter<BaseAbstractClass>))]
     [JsonDiscriminator(Name = "type")]
-    [JsonKnown(typeof(BaseAbstractClass1Heir))]
-    [JsonKnown(typeof(BaseAbstractClass2Heir))]
+    [JsonKnownType(typeof(BaseAbstractClass1Heir))]
+    [JsonKnownType(typeof(BaseAbstractClass2Heir))]
     public abstract class BaseAbstractClass
     {
         public string Summary { get; set; }

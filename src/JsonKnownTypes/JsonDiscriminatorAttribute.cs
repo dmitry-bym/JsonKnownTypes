@@ -6,6 +6,13 @@ namespace JsonKnownTypes
     public class JsonDiscriminatorAttribute : Attribute
     {
         public string Name { get; set; }
-        public bool AutoJsonKnownType { get; set; }
+
+        internal bool? _autoJson;
+
+        public bool AutoJson
+        {
+            get => _autoJson != null && (bool) _autoJson;
+            set => _autoJson = value;
+        }
     }
 }

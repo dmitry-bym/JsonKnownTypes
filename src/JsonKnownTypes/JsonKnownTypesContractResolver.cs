@@ -4,7 +4,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace JsonKnownTypes
 {
-    public class JsonKnownContractResolver<T> : DefaultContractResolver
+    public class JsonKnownTypesContractResolver<T> : DefaultContractResolver
     {
         protected override JsonConverter ResolveContractConverter(Type objectType)
         {

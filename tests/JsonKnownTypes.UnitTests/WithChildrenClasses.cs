@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 namespace JsonKnownTypes.UnitTests
 {
+    [TestFixture]
     public class WithChildrenClasses
     {
         private static string DiscriminatorName { get => "$type"; }
@@ -36,18 +37,27 @@ namespace JsonKnownTypes.UnitTests
             obj.Should().BeEquivalentTo(entity);
             Assert.AreEqual(discriminator, entity.GetType().Name.ToLower());
         }
+
+        [Test]
+        public void Settings_are_correct()
+        {
+            var settings = JsonKnownTypesSettingsManager.GetSettings<ParentClass>();
+
+            Assert.True(settings.TypeToDiscriminator.Count == 3);
+            Assert.AreEqual(settings.Name, DiscriminatorName);
+        }
     }
 
-    [JsonConverter(typeof(JsonKnownConverter<ParentClass>))]
-    [JsonKnown(typeof(ParentClass), "parentclass")]
-    [JsonKnown(typeof(ParentClass2Heir), "parentclass2heir")]
+    [JsonConverter(typeof(JsonKnownTypesConverter<ParentClass>))]
+    [JsonKnownType(typeof(ParentClass), "parentclass")]
+    [JsonKnownType(typeof(ParentClass2Heir), "parentclass2heir")]
     public class ParentClass
     {
         public string Summary { get; set; }
         public ChildClass2Heir Child { get; set; }
     }
 
-    [JsonKnownThis("parentclass1heir")]
+    [JsonKnownThisType("parentclass1heir")]
     public class ParentClass1Heir : ParentClass
     {
         public int SomeInt { get; set; }
@@ -61,10 +71,10 @@ namespace JsonKnownTypes.UnitTests
         ChildClass Child2 { get; set; }
     }
 
-    [JsonConverter(typeof(JsonKnownConverter<ChildClass>))]
-    [JsonKnown(typeof(ChildClass), "childclass")]
-    [JsonKnown(typeof(ChildClass1Heir), "childclass1heir")]
-    [JsonKnown(typeof(ChildClass2Heir), "childclass2heir")]
+    [JsonConverter(typeof(JsonKnownTypesConverter<ChildClass>))]
+    [JsonKnownType(typeof(ChildClass), "childclass")]
+    [JsonKnownType(typeof(ChildClass1Heir), "childclass1heir")]
+    [JsonKnownType(typeof(ChildClass2Heir), "childclass2heir")]
     public class ChildClass
     {
         public string Summary { get; set; }

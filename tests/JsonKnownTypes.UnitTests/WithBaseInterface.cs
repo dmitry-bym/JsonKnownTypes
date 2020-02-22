@@ -34,8 +34,8 @@ namespace JsonKnownTypes.UnitTests
         }
     }
 
-    [JsonConverter(typeof(JsonKnownConverter<IBaseInterface>))]
-    [JsonKnown(typeof(BaseInterface2Heir))]
+    [JsonConverter(typeof(JsonKnownTypesConverter<IBaseInterface>))]
+    [JsonKnownType(typeof(BaseInterface2Heir))]
     public interface IBaseInterface
     {
         string Summary { get; set; }

@@ -3,6 +3,6 @@
     public class JsonDiscriminatorSettings
     {
         public string Name { get; set; } = "$type";
-        public bool AutoJsonKnownType { get; set; } = true;
+        public bool AutoJsonKnown { get; set; } = true;
     }
 }

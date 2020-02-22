@@ -3,10 +3,13 @@
     internal static class Mapper
     {
         public static JsonDiscriminatorSettings Map(JsonDiscriminatorAttribute entity)
-            => new JsonDiscriminatorSettings
-            {
-                Name = entity.Name,
-                AutoJsonKnownType = entity.AutoJsonKnownType
-            };
+        {
+            var settings = new JsonDiscriminatorSettings();
+
+            settings.Name = entity.Name ?? settings.Name;
+            settings.AutoJsonKnown = entity._autoJson ?? settings.AutoJsonKnown;
+            
+            return settings;
+        }
     }
 }

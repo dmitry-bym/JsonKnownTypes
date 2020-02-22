@@ -2,14 +2,14 @@
 
 namespace JsonKnownTypes
 {
-    public class JsonKnownThisAttribute : Attribute
+    public class JsonKnownThisTypeAttribute : Attribute
     {
         public string Discriminator { get; }
 
-        public JsonKnownThisAttribute()
+        public JsonKnownThisTypeAttribute()
         { }
 
-        public JsonKnownThisAttribute(string discriminator)
+        public JsonKnownThisTypeAttribute(string discriminator)
         {
             Discriminator = discriminator;
         }
