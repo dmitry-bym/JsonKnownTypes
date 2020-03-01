@@ -31,7 +31,9 @@ namespace JsonKnownTypes
             }
             else if(!allTypes.All(typeSettings.TypeToDiscriminator.ContainsKey))
             {
-                throw new JsonKnownTypesException("Dictionary contains not all types of hierarchy, enable AutoJsonKnow or add attributes for all classes"); //todo
+                var missingTypes = allTypes.Where(x => !typeSettings.TypeToDiscriminator.ContainsKey(x)).Select(x => x.Name);
+                throw new JsonKnownTypesException($"Dictionary does not contain all classes of hierarchy for type: {nameof(T)}, enable AutoJsonKnow or add attributes for all classes.\r\n" +
+                                                  $" Missing classes {string.Join(", ", missingTypes)}"); //todo
             }
 
             typeSettings.DiscriminatorToType = typeSettings.TypeToDiscriminator.Revert();

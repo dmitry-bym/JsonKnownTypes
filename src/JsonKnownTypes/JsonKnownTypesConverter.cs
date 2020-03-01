@@ -32,7 +32,7 @@ namespace JsonKnownTypes
             if(_typesSettings.DiscriminatorToType.TryGetValue(discriminator, out var typeForObject))
                 return JsonConvert.DeserializeObject(jo.ToString(), typeForObject, SpecifiedSubclassConversion);
 
-            throw new NotImplementedException();
+            throw new NotImplementedException($"discriminator: {discriminator} not registered on type: {nameof(T)}");
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
