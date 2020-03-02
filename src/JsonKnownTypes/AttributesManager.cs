@@ -2,7 +2,7 @@
 
 namespace JsonKnownTypes
 {
-    public static class AttributesManager
+    internal static class AttributesManager
     {
         public static JsonKnownTypeAttribute[] GetJsonKnownAttributes(Type type) =>
             (JsonKnownTypeAttribute[])Attribute.GetCustomAttributes(type, typeof(JsonKnownTypeAttribute));

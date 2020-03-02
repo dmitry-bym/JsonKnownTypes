@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace JsonKnownTypes
 {
-    public class JsonKnownTypesSettings
+    internal class JsonKnownTypesSettings
     {
         public string Name { get; set; }
         public Dictionary<string, Type> DiscriminatorToType { get; set; } = new Dictionary<string, Type>();

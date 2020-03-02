@@ -5,7 +5,7 @@ using JsonKnownTypes.Utils;
 
 namespace JsonKnownTypes
 {
-    public static class JsonKnownTypesSettingsManager
+    internal static class JsonKnownTypesSettingsManager
     {
         public static JsonDiscriminatorSettings DefaultDiscriminatorSettings { get; set; } = new JsonDiscriminatorSettings();
         
