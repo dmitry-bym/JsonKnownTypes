@@ -2,7 +2,7 @@
 {
     public class JsonDiscriminatorSettings
     {
-        public string Name { get; set; } = "$type";
-        public bool AutoJsonKnown { get; set; } = true;
+        public string DiscriminatorFieldName { get; set; }
+        public bool UseClassNameAsDiscriminator { get; set; }
     }
 }

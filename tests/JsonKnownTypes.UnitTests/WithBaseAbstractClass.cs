@@ -38,7 +38,7 @@ namespace JsonKnownTypes.UnitTests
         {
             var settings = JsonKnownTypesSettingsManager.GetSettings<BaseAbstractClass>();
 
-            Assert.True(settings.TypeToDiscriminator.Count == 2);
+            Assert.True(settings.Count == 2);
             Assert.AreEqual(settings.Name, DiscriminatorName);
         }
     }

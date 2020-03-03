@@ -1,4 +1,5 @@
 ﻿using System;
+using JsonKnownTypes.Exceptions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -19,7 +20,7 @@ namespace JsonKnownTypes
         }
         
         public override bool CanConvert(Type objectType)
-            => _typesSettings.TypeToDiscriminator.ContainsKey(objectType);
+            => _typesSettings.Contains(objectType);
 
         public override bool CanWrite { get => true; }
 
@@ -29,16 +30,16 @@ namespace JsonKnownTypes
 
             var discriminator = jo[_typesSettings.Name].ToString();
 
-            if(_typesSettings.DiscriminatorToType.TryGetValue(discriminator, out var typeForObject))
+            if(_typesSettings.TryGetType(discriminator, out var typeForObject))
                 return JsonConvert.DeserializeObject(jo.ToString(), typeForObject, SpecifiedSubclassConversion);
 
-            throw new NotImplementedException();
+            throw new JsonKnownTypesException($"discriminator {discriminator} is not registered for {nameof(T)} base type");
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var objectType = value.GetType();
-            if (_typesSettings.TypeToDiscriminator.TryGetValue(objectType, out var discriminator))
+            if (_typesSettings.TryGetDiscriminator(objectType, out var discriminator))
             {
                 var json = JsonConvert.SerializeObject(value, SpecifiedSubclassConversion);
                 var jo = JObject.Parse(json);
@@ -47,7 +48,7 @@ namespace JsonKnownTypes
             }
             else
             {
-                throw new NotImplementedException();
+                throw new JsonKnownTypesException($"there is no discriminator for {objectType.Name} type");
             }
         }
     }

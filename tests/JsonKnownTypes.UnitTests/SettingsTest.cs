@@ -12,7 +12,7 @@ namespace JsonKnownTypes.UnitTests
         {
             var settings = JsonKnownTypesSettingsManager.GetSettings<ISettings>();
             
-            Assert.True(settings.TypeToDiscriminator.Count == 0);
+            Assert.True(settings.Count == 0);
             Assert.AreEqual(settings.Name, "name");
         }
 

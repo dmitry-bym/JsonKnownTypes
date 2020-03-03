@@ -6,8 +6,8 @@
         {
             var settings = new JsonDiscriminatorSettings();
 
-            settings.Name = entity.Name ?? settings.Name;
-            settings.AutoJsonKnown = entity._autoJson ?? settings.AutoJsonKnown;
+            settings.DiscriminatorFieldName = entity.Name ?? settings.DiscriminatorFieldName;
+            settings.UseClassNameAsDiscriminator = entity.AutoJson ?? settings.UseClassNameAsDiscriminator;
             
             return settings;
         }

@@ -7,12 +7,12 @@ namespace JsonKnownTypes
     {
         public string Name { get; set; }
 
-        internal bool? _autoJson;
+        internal bool? AutoJson;
 
-        public bool AutoJson
+        public bool UseClassNameAsDiscriminator
         {
-            get => _autoJson != null && (bool) _autoJson;
-            set => _autoJson = value;
+            get => AutoJson != false;
+            set => AutoJson = value;
         }
     }
 }

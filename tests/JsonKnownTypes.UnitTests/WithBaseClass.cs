@@ -48,13 +48,13 @@ namespace JsonKnownTypes.UnitTests
         {
             var settings = JsonKnownTypesSettingsManager.GetSettings<BaseClass>();
 
-            Assert.True(settings.TypeToDiscriminator.Count == 4);
+            Assert.True(settings.Count == 4);
             Assert.AreEqual(settings.Name, DiscriminatorName);
         }
     }
 
     [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
-    [JsonDiscriminator(AutoJson = false, Name = "type")]
+    [JsonDiscriminator(UseClassNameAsDiscriminator = false, Name = "type")]
     [JsonKnownThisType]
     public class BaseClass
     {
