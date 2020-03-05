@@ -36,6 +36,30 @@ Json representation:
 { "Summary":"someValue", "$type":"BaseClass" }
 { "Summary":"someValue", "Detailed":"someValue", "$type":"ChildClass" }
 ```
+### Using with Interfaces or Abstract classes
+Also you can use it similar with interfaces or abstract classes
+#### Interface
+```c#
+  [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
+  public interface IInterface  { ... }
+ 
+  public class ChildClass : IInterface  { ... }
+```
+Json representation:
+```json
+{ ... "$type":"ChildClass" }
+```
+#### Abstract class
+```c#
+  [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
+  public abstract class AbstractClass  { ... }
+ 
+  public class ChildClass : AbstractClass  { ... }
+```
+Json representation:
+```json
+{ ... "$type":"ChildClass" }
+```
 ### JsonKnownType
 If you need to add custom discriminator just use `JsonKnowType` attribute.  
 By default for discriminattor property using `"$type"` name, if you need to change it use `JsonKnownDiscriminator` attribute. 
