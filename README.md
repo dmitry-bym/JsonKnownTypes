@@ -46,7 +46,7 @@ Also you can use it similar with interfaces or abstract classes
   public class ChildClass : IInterface  { ... }
 ```
 Json representation:
-```json
+```
 { ... "$type":"ChildClass" }
 ```
 #### Abstract class
@@ -57,7 +57,7 @@ Json representation:
   public class ChildClass : AbstractClass  { ... }
 ```
 Json representation:
-```json
+```
 { ... "$type":"ChildClass" }
 ```
 ### JsonKnownType
