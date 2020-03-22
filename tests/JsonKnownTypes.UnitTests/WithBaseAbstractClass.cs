@@ -36,10 +36,10 @@ namespace JsonKnownTypes.UnitTests
         [Test]
         public void Settings_are_correct()
         {
-            var settings = JsonKnownTypesSettingsManager.GetSettings<BaseAbstractClass>();
+            var settings = JsonKnownTypesSettingsManager.GetDiscriminatorValues<BaseAbstractClass>();
 
             Assert.True(settings.Count == 2);
-            Assert.AreEqual(settings.Name, DiscriminatorName);
+            Assert.AreEqual(settings.FieldName, DiscriminatorName);
         }
     }
 

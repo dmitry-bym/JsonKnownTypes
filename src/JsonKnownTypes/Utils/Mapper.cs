@@ -2,7 +2,7 @@
 {
     internal static class Mapper
     {
-        public static JsonDiscriminatorSettings Map(JsonDiscriminatorAttribute entity)
+        internal static JsonDiscriminatorSettings Map(JsonDiscriminatorAttribute entity)
         {
             var settings = new JsonDiscriminatorSettings();
 

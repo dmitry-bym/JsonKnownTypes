@@ -10,17 +10,17 @@ namespace JsonKnownTypes.UnitTests
         [Test]
         public void Contains_correct_settings_interface()
         {
-            var settings = JsonKnownTypesSettingsManager.GetSettings<ISettings>();
+            var settings = JsonKnownTypesSettingsManager.GetDiscriminatorValues<ISettings>();
             
             Assert.True(settings.Count == 0);
-            Assert.AreEqual(settings.Name, "name");
+            Assert.AreEqual(settings.FieldName, "name");
         }
 
         [Test]
         public void Throw_an_exception() =>
             Assert.Throws<JsonKnownTypesException>(delegate
             {
-                JsonKnownTypesSettingsManager.GetSettings<Settings>();
+                JsonKnownTypesSettingsManager.GetDiscriminatorValues<Settings>();
             });
     }
 

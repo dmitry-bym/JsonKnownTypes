@@ -41,13 +41,13 @@ namespace JsonKnownTypes.UnitTests
         [Test]
         public void Settings_are_correct()
         {
-            var settings = JsonKnownTypesSettingsManager.GetSettings<ParentClass>();
+            var settings = JsonKnownTypesSettingsManager.GetDiscriminatorValues<ParentClass>();
 
             Assert.True(settings.Count == 3);
-            Assert.AreEqual(settings.Name, DiscriminatorName);
+            Assert.AreEqual(settings.FieldName, DiscriminatorName);
         }
     }
-
+    
     [JsonConverter(typeof(JsonKnownTypesConverter<ParentClass>))]
     [JsonKnownType(typeof(ParentClass), "parentclass")]
     [JsonKnownType(typeof(ParentClass2Heir), "parentclass2heir")]
