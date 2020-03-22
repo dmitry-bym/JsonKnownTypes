@@ -37,7 +37,7 @@ Json representation:
 ```
 ### JsonKnownType
 If you need to add custom discriminator just use `JsonKnowType` attribute.  
-By default for discriminattor property using `"$type"` name, if you need to change it use `JsonKnownDiscriminator` attribute. 
+By default for discriminattor property using `"$type"` name, if you need to change it use `JsonDiscriminator` attribute. 
 ```c#
   [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
   [JsonDiscriminator(Name = "myType")] //add custom discriminator name
