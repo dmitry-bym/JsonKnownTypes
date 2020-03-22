@@ -46,15 +46,15 @@ namespace JsonKnownTypes.UnitTests
         [Test]
         public void Settings_are_correct()
         {
-            var settings = JsonKnownTypesSettingsManager.GetSettings<BaseClass>();
+            var settings = JsonKnownTypesSettingsManager.GetDiscriminatorValues<BaseClass>();
 
-            Assert.True(settings.TypeToDiscriminator.Count == 4);
-            Assert.AreEqual(settings.Name, DiscriminatorName);
+            Assert.True(settings.Count == 4);
+            Assert.AreEqual(settings.FieldName, DiscriminatorName);
         }
     }
 
     [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
-    [JsonDiscriminator(AutoJson = false, Name = "type")]
+    [JsonDiscriminator(UseClassNameAsDiscriminator = false, Name = "type")]
     [JsonKnownThisType]
     public class BaseClass
     {

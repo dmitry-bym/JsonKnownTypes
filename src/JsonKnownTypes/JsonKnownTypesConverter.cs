@@ -1,4 +1,5 @@
 ﻿using System;
+using JsonKnownTypes.Exceptions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -6,8 +7,8 @@ namespace JsonKnownTypes
 {
     public class JsonKnownTypesConverter<T> : JsonConverter
     {
-        private readonly JsonKnownTypesSettings _typesSettings 
-            = JsonKnownTypesSettingsManager.GetSettings<T>();
+        private readonly DiscriminatorValues _typesDiscriminatorValues 
+            = JsonKnownTypesSettingsManager.GetDiscriminatorValues<T>();
 
         private JsonSerializerSettings SpecifiedSubclassConversion
         {
@@ -19,7 +20,7 @@ namespace JsonKnownTypes
         }
         
         public override bool CanConvert(Type objectType)
-            => _typesSettings.TypeToDiscriminator.ContainsKey(objectType);
+            => _typesDiscriminatorValues.Contains(objectType);
 
         public override bool CanWrite { get => true; }
 
@@ -27,27 +28,27 @@ namespace JsonKnownTypes
         {
             var jo = JObject.Load(reader);
 
-            var discriminator = jo[_typesSettings.Name].ToString();
+            var discriminator = jo[_typesDiscriminatorValues.FieldName].ToString();
 
-            if(_typesSettings.DiscriminatorToType.TryGetValue(discriminator, out var typeForObject))
+            if (_typesDiscriminatorValues.TryGetType(discriminator, out var typeForObject))
                 return JsonConvert.DeserializeObject(jo.ToString(), typeForObject, SpecifiedSubclassConversion);
 
-            throw new NotImplementedException();
+            throw new JsonKnownTypesException($"{discriminator} discriminator is not registered for {nameof(T)} type");
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var objectType = value.GetType();
-            if (_typesSettings.TypeToDiscriminator.TryGetValue(objectType, out var discriminator))
+            if (_typesDiscriminatorValues.TryGetDiscriminator(objectType, out var discriminator))
             {
                 var json = JsonConvert.SerializeObject(value, SpecifiedSubclassConversion);
                 var jo = JObject.Parse(json);
-                jo.Add(_typesSettings.Name, new JValue(discriminator));
+                jo.Add(_typesDiscriminatorValues.FieldName, new JValue(discriminator));
                 jo.WriteTo(writer);
             }
             else
             {
-                throw new NotImplementedException();
+                throw new JsonKnownTypesException($"There is no discriminator for {objectType.Name} type");
             }
         }
     }

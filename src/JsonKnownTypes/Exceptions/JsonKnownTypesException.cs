@@ -7,9 +7,5 @@ namespace JsonKnownTypes.Exceptions
         public JsonKnownTypesException(string message) 
             : base(message)
         { }
-
-        public JsonKnownTypesException(string message, Exception innerException) 
-            : base(message, innerException)
-        { }
     }
 }

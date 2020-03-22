@@ -1,6 +1,5 @@
 # JsonKnownTypes .Net Standard
-[![lisence](https://img.shields.io/badge/nuget-v0.2.0-orange?logo=nuget&style=flat-square)](https://www.nuget.org/packages/JsonKnownTypes/)  
-Please, update from v0.1.0, there was critical bugs
+[![lisence](https://img.shields.io/badge/nuget-v0.3.0-orange?logo=nuget&style=flat-square)](https://www.nuget.org/packages/JsonKnownTypes/)  
 
 Help to serialize and deserialize polymorphic types. Add distractor to json data
 
@@ -62,7 +61,7 @@ Json representation:
 ```
 ### JsonKnownType
 If you need to add custom discriminator just use `JsonKnowType` attribute.  
-By default for discriminattor property using `"$type"` name, if you need to change it use `JsonKnownDiscriminator` attribute. 
+By default for discriminattor property using `"$type"` name, if you need to change it use `JsonDiscriminator` attribute. 
 ```c#
   [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
   [JsonDiscriminator(Name = "myType")] //add custom discriminator name
@@ -108,13 +107,13 @@ For change default discriminator settings use:
 ```c#
   JsonKnownTypesSettingsManager.DefaultDiscriminatorSettings = new JsonDiscriminatorSettings
   {
-    Name = "name",
-    AutoJsonKnown = false
+    DiscriminatorFieldName = "name",
+    UseClassNameAsDiscriminator = false
   };
 ```
-> Name change default `"$type"` name to yours  
+> `DiscriminatorFieldName` change default `"$type"` name to yours  
 
-> If `AutoJsonKnownType` is false you should to add `JsonKnownType` or `JsonKnownThisType` attribute for each relative class manualy or it throw an Exception
+> If `UseClassNameAsDiscriminator` is false you should to add `JsonKnownType` or `JsonKnownThisType` attribute for each relative class manualy or it throw an Exception
 ### Use manualy
 ```c#
   public class BaseClass { ... }
@@ -127,7 +126,7 @@ For change default discriminator settings use:
   var entityJson = JsonConvert.SerializeObject(entity, converter);
   var obj = DeserializeObject<BaseClass>(entityJson, converter)
 ```
-> Need to add converter to method just if you don't use `JsonConvert` attribute
+> Need to add converter to method just if you don't use `JsonConverter` attribute
 ## License
 
 Authored by: Dmitry Kaznacheev (dmitry-bym)
