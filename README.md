@@ -39,7 +39,7 @@ Json representation:
 Also you can use it similar with interfaces or abstract classes
 #### Interface
 ```c#
-  [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
+  [JsonConverter(typeof(JsonKnownTypesConverter<IInterface>))]
   public interface IInterface  { ... }
  
   public class ChildClass : IInterface  { ... }
@@ -50,7 +50,7 @@ Json representation:
 ```
 #### Abstract class
 ```c#
-  [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
+  [JsonConverter(typeof(JsonKnownTypesConverter<AbstractClass>))]
   public abstract class AbstractClass  { ... }
  
   public class ChildClass : AbstractClass  { ... }
@@ -69,9 +69,9 @@ By default for discriminattor property using `"$type"` name, if you need to chan
   [JsonKnownType(typeof(BaseClass2Heir), "myDiscriminator")]
   public class BaseClass { ... }
   
-  public class BaseAbstractClass1Heir : BaseClass  { ... }
+  public class BaseClass1Heir : BaseClass  { ... }
   
-  public class BaseAbstractClass2Heir : BaseClass  { ... }
+  public class BaseClass2Heir : BaseClass  { ... }
 ```
 Json representation:
 ```
@@ -89,10 +89,10 @@ Add discriminator for type which is used with it
   public class BaseClass { ... }
   
   [JsonKnownThisType("html_is_programming_language")]
-  public class BaseAbstractClass1Heir : BaseClass  { ... }
+  public class BaseClass1Heir : BaseClass  { ... }
   
   [JsonKnownThisType("just_joke=)")]
-  public class BaseAbstractClass2Heir : BaseClass  { ... }
+  public class BaseClass2Heir : BaseClass  { ... }
 ```
 Json representation:
 ```
