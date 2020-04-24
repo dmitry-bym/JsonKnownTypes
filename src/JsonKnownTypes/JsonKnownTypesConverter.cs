@@ -5,6 +5,9 @@ using Newtonsoft.Json.Linq;
 
 namespace JsonKnownTypes
 {
+    /// <summary>
+    /// Convert json using discriminator
+    /// </summary>
     public class JsonKnownTypesConverter<T> : JsonConverter
     {
         private readonly DiscriminatorValues _typesDiscriminatorValues 

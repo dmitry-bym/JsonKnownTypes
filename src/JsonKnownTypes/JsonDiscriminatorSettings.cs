@@ -2,7 +2,14 @@
 {
     public class JsonDiscriminatorSettings
     {
-        public string DiscriminatorFieldName { get; set; }
-        public bool UseClassNameAsDiscriminator { get; set; }
+        /// <summary>
+        /// Discriminator field name in json representation
+        /// </summary>
+        public string DiscriminatorFieldName { get; set; } = "$type";
+
+        /// <summary>
+        /// Use class name as discriminator if JsonKnown attribute didn't add
+        /// </summary>
+        public bool UseClassNameAsDiscriminator { get; set; } = true;
     }
 }

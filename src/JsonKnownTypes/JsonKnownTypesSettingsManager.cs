@@ -7,12 +7,11 @@ namespace JsonKnownTypes
 {
     public static class JsonKnownTypesSettingsManager
     {
+        /// <summary>
+        /// Default settings for discriminator
+        /// </summary>
         public static JsonDiscriminatorSettings DefaultDiscriminatorSettings { get; set; } =
-            new JsonDiscriminatorSettings
-            {
-                DiscriminatorFieldName = "$type",
-                UseClassNameAsDiscriminator = true
-            };
+            new JsonDiscriminatorSettings();
 
         internal static DiscriminatorValues GetDiscriminatorValues<T>()
         {
