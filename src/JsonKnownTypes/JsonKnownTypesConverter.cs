@@ -33,7 +33,8 @@ namespace JsonKnownTypes
             
             var jo = JObject.Load(reader);
 
-            var discriminator = jo[_typesDiscriminatorValues.FieldName].ToString();
+            var discriminator = jo[_typesDiscriminatorValues.FieldName]?.ToString() 
+                ?? throw new JsonKnownTypesException($"There is no discriminator fields with {_typesDiscriminatorValues.FieldName} name in json string or it is empty.");
 
             if (_typesDiscriminatorValues.TryGetType(discriminator, out var typeForObject))
                 return JsonConvert.DeserializeObject(jo.ToString(), typeForObject, SpecifiedSubclassConversion);

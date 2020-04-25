@@ -30,14 +30,6 @@ namespace JsonKnownTypes
             {
                 typeSettings.AddAutoDiscriminators(allTypes);
             }
-            else if (!allTypes.All(typeSettings.Contains))
-            {
-                var missingTypes = allTypes.Where(x => !typeSettings.Contains(x)).Select(x => x.Name);
-
-                throw new JsonKnownTypesException($"Not all classes registered for { nameof(T) } type hierarchy." +
-                                                  "Enable UseClassNameAsDiscriminator or add JsonKnown attributes for all classes." +
-                                                  $"Missing classes: { string.Join(", ", missingTypes) }");
-            }
 
             return typeSettings;
         }
