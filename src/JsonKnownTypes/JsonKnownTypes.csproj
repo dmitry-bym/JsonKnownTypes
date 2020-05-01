@@ -10,7 +10,7 @@
 
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.3.0</Version>
+    <Version>0.4.0</Version>
     <Authors>Dmitry Kaznacheev</Authors>
     <PackageProjectUrl>https://github.com/dmitry-bym/JsonKnownTypes</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/dmitry-bym/JsonKnownTypes/blob/master/LICENSE</PackageLicenseUrl>
