@@ -1,6 +1,4 @@
-﻿using System;
-using AutoFixture.NUnit3;
-using JsonKnownTypes.Exceptions;
+﻿using AutoFixture.NUnit3;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -38,31 +36,31 @@ namespace JsonKnownTypes.UnitTests
                 JsonConvert.SerializeObject(entity);
             });
         }
-    }
 
-    [JsonConverter(typeof(JsonKnownTypesConverter<BaseClassSameDiscriminator>))]
-    [JsonKnownType(typeof(BaseClassSameDiscriminator))]
-    [JsonKnownType(typeof(BaseClassSameDiscriminator1Heir), "same name")]
-    [JsonKnownType(typeof(BaseClassSameDiscriminator2Heir), "same name")]
-    [JsonKnownType(typeof(BaseClassSameDiscriminator3Heir), "same name")]
-    public class BaseClassSameDiscriminator
-    {
-        public string Summary { get; set; }
-    }
+        [JsonConverter(typeof(JsonKnownTypesConverter<BaseClassSameDiscriminator>))]
+        [JsonKnownType(typeof(BaseClassSameDiscriminator))]
+        [JsonKnownType(typeof(BaseClassSameDiscriminator1Heir), "same name")]
+        [JsonKnownType(typeof(BaseClassSameDiscriminator2Heir), "same name")]
+        [JsonKnownType(typeof(BaseClassSameDiscriminator3Heir), "same name")]
+        public class BaseClassSameDiscriminator
+        {
+            public string Summary { get; set; }
+        }
 
-    public class BaseClassSameDiscriminator1Heir : BaseClassSameDiscriminator
-    {
-        public int SomeInt { get; set; }
-    }
+        public class BaseClassSameDiscriminator1Heir : BaseClassSameDiscriminator
+        {
+            public int SomeInt { get; set; }
+        }
 
-    public class BaseClassSameDiscriminator2Heir : BaseClassSameDiscriminator1Heir
-    {
-        public double SomeDouble { get; set; }
-        public string Detailed { get; set; }
-    }
+        public class BaseClassSameDiscriminator2Heir : BaseClassSameDiscriminator1Heir
+        {
+            public double SomeDouble { get; set; }
+            public string Detailed { get; set; }
+        }
 
-    public class BaseClassSameDiscriminator3Heir : BaseClassSameDiscriminator2Heir
-    {
-        public string SomeString { get; set; }
+        public class BaseClassSameDiscriminator3Heir : BaseClassSameDiscriminator2Heir
+        {
+            public string SomeString { get; set; }
+        }
     }
 }

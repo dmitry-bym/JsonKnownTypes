@@ -4,7 +4,7 @@ namespace JsonKnownTypes
 {
     internal static class DiscriminatorValuesManager
     {
-        public static void AddJsonKnown<T>(this DiscriminatorValues discriminatorValues)
+        internal static void AddJsonKnown<T>(this DiscriminatorValues discriminatorValues)
         {
             var attrs = AttributesManager.GetJsonKnownAttributes(typeof(T));
             foreach (var attr in attrs)
@@ -14,7 +14,7 @@ namespace JsonKnownTypes
             }
         }
 
-        public static void AddJsonKnownThis(this DiscriminatorValues discriminatorValues, Type[] inherited)
+        internal static void AddJsonKnownThis(this DiscriminatorValues discriminatorValues, Type[] inherited)
         {
             foreach (var type in inherited)
             {
@@ -27,7 +27,7 @@ namespace JsonKnownTypes
             }
         }
 
-        public static void AddAutoDiscriminators(this DiscriminatorValues discriminatorValues, Type[] inherited)
+        internal static void AddAutoDiscriminators(this DiscriminatorValues discriminatorValues, Type[] inherited)
         {
             foreach (var type in inherited)
             {

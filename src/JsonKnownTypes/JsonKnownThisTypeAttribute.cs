@@ -2,7 +2,10 @@
 
 namespace JsonKnownTypes
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
+    /// <summary>
+    /// Add discriminator to type which is used with
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, Inherited = false)]
     public class JsonKnownThisTypeAttribute : Attribute
     {
         public string Discriminator { get; }

@@ -32,23 +32,23 @@ namespace JsonKnownTypes.UnitTests
             obj.Should().BeEquivalentTo(entity);
             Assert.AreEqual(discriminator, entity.GetType().Name);
         }
-    }
 
-    [JsonConverter(typeof(JsonKnownTypesConverter<IBaseInterface>))]
-    [JsonKnownType(typeof(BaseInterface2Heir))]
-    public interface IBaseInterface
-    {
-        string Summary { get; set; }
-    }
+        [JsonConverter(typeof(JsonKnownTypesConverter<IBaseInterface>))]
+        [JsonKnownType(typeof(BaseInterface2Heir))]
+        public interface IBaseInterface
+        {
+            string Summary { get; set; }
+        }
 
-    public class BaseInterface1Heir : IBaseInterface
-    {
-        public string Summary { get; set; }
-    }
+        public class BaseInterface1Heir : IBaseInterface
+        {
+            public string Summary { get; set; }
+        }
 
-    public class BaseInterface2Heir : IBaseInterface
-    {
-        public string Summary { get; set; }
-        public string Detailed { get; set; }
+        public class BaseInterface2Heir : IBaseInterface
+        {
+            public string Summary { get; set; }
+            public string Detailed { get; set; }
+        }
     }
 }

@@ -41,25 +41,25 @@ namespace JsonKnownTypes.UnitTests
             Assert.True(settings.Count == 2);
             Assert.AreEqual(settings.FieldName, DiscriminatorName);
         }
-    }
 
-    [JsonConverter(typeof(JsonKnownTypesConverter<BaseAbstractClass>))]
-    [JsonDiscriminator(Name = "type")]
-    [JsonKnownType(typeof(BaseAbstractClass1Heir))]
-    [JsonKnownType(typeof(BaseAbstractClass2Heir))]
-    public abstract class BaseAbstractClass
-    {
-        public string Summary { get; set; }
-    }
+        [JsonConverter(typeof(JsonKnownTypesConverter<BaseAbstractClass>))]
+        [JsonDiscriminator(Name = "type")]
+        [JsonKnownType(typeof(BaseAbstractClass1Heir))]
+        [JsonKnownType(typeof(BaseAbstractClass2Heir))]
+        public abstract class BaseAbstractClass
+        {
+            public string Summary { get; set; }
+        }
 
-    public class BaseAbstractClass1Heir : BaseAbstractClass
-    {
-        public int SomeInt { get; set; }
-    }
+        public class BaseAbstractClass1Heir : BaseAbstractClass
+        {
+            public int SomeInt { get; set; }
+        }
 
-    public class BaseAbstractClass2Heir : BaseAbstractClass
-    {
-        public double SomeDouble { get; set; }
-        public string Detailed { get; set; }
+        public class BaseAbstractClass2Heir : BaseAbstractClass
+        {
+            public double SomeDouble { get; set; }
+            public string Detailed { get; set; }
+        }
     }
 }
