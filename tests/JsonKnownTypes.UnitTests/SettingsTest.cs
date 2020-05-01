@@ -22,23 +22,23 @@ namespace JsonKnownTypes.UnitTests
             {
                 JsonKnownTypesSettingsManager.GetDiscriminatorValues<Settings>();
             });
-    }
 
-    [JsonConverter(typeof(JsonKnownTypesConverter<ISettings>))]
-    [JsonDiscriminator(Name = "name")]
-    public interface ISettings
-    {
-        string Summary { get; set; }
-    }
+        [JsonConverter(typeof(JsonKnownTypesConverter<ISettings>))]
+        [JsonDiscriminator(Name = "name")]
+        public interface ISettings
+        {
+            string Summary { get; set; }
+        }
 
-    [JsonConverter(typeof(JsonKnownTypesConverter<Settings>))]
-    [JsonDiscriminator(Name = "NotName")]
-    public class Settings
-    {
-        string Summary { get; set; }
-    }
+        [JsonConverter(typeof(JsonKnownTypesConverter<Settings>))]
+        [JsonDiscriminator(Name = "NotName")]
+        public class Settings
+        {
+            string Summary { get; set; }
+        }
 
-    [JsonKnownThisType("Settings")] //same discriminator as for Settings should throw
-    public class Settings1 : Settings
-    { }
+        [JsonKnownThisType("Settings")] //same discriminator as for Settings should throw
+        public class Settings1 : Settings
+        { }
+    }
 }

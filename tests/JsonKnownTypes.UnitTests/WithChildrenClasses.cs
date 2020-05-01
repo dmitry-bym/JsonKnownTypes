@@ -46,48 +46,48 @@ namespace JsonKnownTypes.UnitTests
             Assert.True(settings.Count == 3);
             Assert.AreEqual(settings.FieldName, DiscriminatorName);
         }
-    }
-    
-    [JsonConverter(typeof(JsonKnownTypesConverter<ParentClass>))]
-    [JsonKnownType(typeof(ParentClass), "parentclass")]
-    [JsonKnownType(typeof(ParentClass2Heir), "parentclass2heir")]
-    public class ParentClass
-    {
-        public string Summary { get; set; }
-        public ChildClass2Heir Child { get; set; }
-    }
 
-    [JsonKnownThisType("parentclass1heir")]
-    public class ParentClass1Heir : ParentClass
-    {
-        public int SomeInt { get; set; }
-        public ChildClass1Heir Child2 { get; set; }
-    }
+        [JsonConverter(typeof(JsonKnownTypesConverter<ParentClass>))]
+        [JsonKnownType(typeof(ParentClass), "parentclass")]
+        [JsonKnownType(typeof(ParentClass2Heir), "parentclass2heir")]
+        public class ParentClass
+        {
+            public string Summary { get; set; }
+            public ChildClass2Heir Child { get; set; }
+        }
 
-    public class ParentClass2Heir : ParentClass
-    {
-        public double SomeDouble { get; set; }
-        public string Detailed { get; set; }
-        ChildClass Child2 { get; set; }
-    }
+        [JsonKnownThisType("parentclass1heir")]
+        public class ParentClass1Heir : ParentClass
+        {
+            public int SomeInt { get; set; }
+            public ChildClass1Heir Child2 { get; set; }
+        }
 
-    [JsonConverter(typeof(JsonKnownTypesConverter<ChildClass>))]
-    [JsonKnownType(typeof(ChildClass), "childclass")]
-    [JsonKnownType(typeof(ChildClass1Heir), "childclass1heir")]
-    [JsonKnownType(typeof(ChildClass2Heir), "childclass2heir")]
-    public class ChildClass
-    {
-        public string Summary { get; set; }
-    }
+        public class ParentClass2Heir : ParentClass
+        {
+            public double SomeDouble { get; set; }
+            public string Detailed { get; set; }
+            ChildClass Child2 { get; set; }
+        }
 
-    public class ChildClass1Heir : ChildClass
-    {
-        public int SomeInt { get; set; }
-    }
+        [JsonConverter(typeof(JsonKnownTypesConverter<ChildClass>))]
+        [JsonKnownType(typeof(ChildClass), "childclass")]
+        [JsonKnownType(typeof(ChildClass1Heir), "childclass1heir")]
+        [JsonKnownType(typeof(ChildClass2Heir), "childclass2heir")]
+        public class ChildClass
+        {
+            public string Summary { get; set; }
+        }
 
-    public class ChildClass2Heir : ChildClass
-    {
-        public double SomeDouble { get; set; }
-        public string Detailed { get; set; }
+        public class ChildClass1Heir : ChildClass
+        {
+            public int SomeInt { get; set; }
+        }
+
+        public class ChildClass2Heir : ChildClass
+        {
+            public double SomeDouble { get; set; }
+            public string Detailed { get; set; }
+        }
     }
 }

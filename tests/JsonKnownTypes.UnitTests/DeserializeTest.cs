@@ -10,13 +10,11 @@ namespace JsonKnownTypes.UnitTests
         [Test]
         [TestCase("{\"field\":\"value\"}")]
         [TestCase("{\"field\":\"value\", \"disc\":\"\"}")]
-        public void Deserialize_without_discriminator(string json)
-        {
+        public void Deserialize_wi4thout_discriminator(string json) =>
             Assert.Throws<JsonKnownTypesException>(delegate
             {
                 JsonConvert.DeserializeObject<DeserializeTestClass>(json);
             });
-        }
 
 
         [JsonConverter(typeof(JsonKnownTypesConverter<DeserializeTestClass>))]
