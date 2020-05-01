@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using JsonKnownTypes.Exceptions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -10,47 +11,56 @@ namespace JsonKnownTypes
     /// </summary>
     public class JsonKnownTypesConverter<T> : JsonConverter
     {
-        private readonly DiscriminatorValues _typesDiscriminatorValues 
+        private readonly DiscriminatorValues _typesDiscriminatorValues
             = JsonKnownTypesSettingsManager.GetDiscriminatorValues<T>();
-
-        private JsonSerializerSettings SpecifiedSubclassConversion
-        {
-            get =>
-                new JsonSerializerSettings
-                {
-                    ContractResolver = new JsonKnownTypesContractResolver<T>()
-                };
-        }
         
         public override bool CanConvert(Type objectType)
             => _typesDiscriminatorValues.Contains(objectType);
-
-        public override bool CanWrite { get => true; }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null) return null;
             
-            var jo = JObject.Load(reader);
+            var jObject = JObject.Load(reader);
 
-            var discriminator = jo[_typesDiscriminatorValues.FieldName]?.ToString() 
-                ?? throw new JsonKnownTypesException($"There is no discriminator fields with {_typesDiscriminatorValues.FieldName} name in json string or it is empty.");
+            var discriminator = jObject[_typesDiscriminatorValues.FieldName]?.Value<string>();
+
+            if(string.IsNullOrEmpty(discriminator))
+                throw new JsonKnownTypesException($"There is no discriminator fields with {_typesDiscriminatorValues.FieldName} name in json string or it is empty.");
 
             if (_typesDiscriminatorValues.TryGetType(discriminator, out var typeForObject))
-                return JsonConvert.DeserializeObject(jo.ToString(), typeForObject, SpecifiedSubclassConversion);
+            {
+                var jsonReader = jObject.CreateReader();
+                var target = _typesDiscriminatorValues.CreateInstance(typeForObject);
+
+                serializer.Populate(jsonReader, target);
+                return target;
+            }
 
             throw new JsonKnownTypesException($"{discriminator} discriminator is not registered for {nameof(T)} type");
         }
 
+        private readonly ThreadLocal<bool> _isInWrite = new ThreadLocal<bool>();
+
+        public override bool CanWrite { get => !_isInWrite.Value; }
+
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
+            if (value == null)
+            {
+                writer.WriteNull();
+                return;
+            }
+
             var objectType = value.GetType();
             if (_typesDiscriminatorValues.TryGetDiscriminator(objectType, out var discriminator))
             {
-                var json = JsonConvert.SerializeObject(value, SpecifiedSubclassConversion);
-                var jo = JObject.Parse(json);
-                jo.Add(_typesDiscriminatorValues.FieldName, new JValue(discriminator));
-                jo.WriteTo(writer);
+                _isInWrite.Value = true;
+
+                var writerProxy = new JsonKnownProxyWriter(_typesDiscriminatorValues.FieldName, discriminator, writer);
+                serializer.Serialize(writerProxy, value, objectType);
+
+                _isInWrite.Value = false;
             }
             else
             {
