@@ -1,8 +1,9 @@
 # JsonKnownTypes .Net Standard
 [![nuget](https://img.shields.io/badge/nuget-v0.4.0-orange?style=flat-square)](https://www.nuget.org/packages/JsonKnownTypes)
+[![downloads](https://img.shields.io/nuget/dt/JsonKnownTypes?style=flat-square)](https://www.nuget.org/packages/JsonKnownTypes)
 [![lisence](https://img.shields.io/badge/lisence-MIT-green?style=flat-square)](https://github.com/dmitry-bym/JsonKnownTypes/blob/master/LICENSE)
 
-Help to serialize and deserialize polymorphic types. Add discriminator to json data
+Help to serialize and deserialize polymorphic types. Add discriminator to json
 
 - [Documentation](#Documentation)
 - [License](#License)
