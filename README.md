@@ -67,7 +67,7 @@ By default for discriminattor property using `"$type"` name, if you need to chan
 ```c#
   [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
   [JsonDiscriminator(Name = "myType")] //add custom discriminator name
-  [JsonKnownType(typeof(BaseClass1Heir))] //could be deleted if you didn't turn off AutoJsonKnownType
+  [JsonKnownType(typeof(BaseClass1Heir))] //could be deleted if you didn't turn off UseClassNameAsDiscriminator
   [JsonKnownType(typeof(BaseClass2Heir), "myDiscriminator")]
   public class BaseClass { ... }
   
