@@ -17,6 +17,10 @@ namespace JsonKnownTypes
         public override bool CanConvert(Type objectType)
             => _typesDiscriminatorValues.Contains(objectType);
 
+        private readonly ThreadLocal<bool> _isInRead = new ThreadLocal<bool>();
+
+        public override bool CanRead { get => !_isInRead.Value; }
+
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null) return null;
@@ -31,10 +35,14 @@ namespace JsonKnownTypes
             if (_typesDiscriminatorValues.TryGetType(discriminator, out var typeForObject))
             {
                 var jsonReader = jObject.CreateReader();
-                var target = _typesDiscriminatorValues.CreateInstance(typeForObject);
+                
+                _isInRead.Value = true;
 
-                serializer.Populate(jsonReader, target);
-                return target;
+                var obj = serializer.Deserialize(jsonReader, typeForObject);
+
+                _isInRead.Value = false;
+                
+                return obj;
             }
 
             throw new JsonKnownTypesException($"{discriminator} discriminator is not registered for {nameof(T)} type");

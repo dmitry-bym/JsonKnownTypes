@@ -6,12 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoFixture" Version="4.11.0" />
     <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\JsonKnownTypes\JsonKnownTypes.csproj" />
-    <ProjectReference Include="..\tests\JsonKnownTypes.UnitTests\JsonKnownTypes.UnitTests.csproj" />
+    <ProjectReference Include="..\..\src\JsonKnownTypes\JsonKnownTypes.csproj" />
   </ItemGroup>
 
 </Project>

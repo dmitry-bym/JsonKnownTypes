@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonKnownTypes", "src\JsonK
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonKnownTypes.UnitTests", "tests\JsonKnownTypes.UnitTests\JsonKnownTypes.UnitTests.csproj", "{3DE82BA5-F66A-4E39-AC18-427D22778E32}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonKnownTypes.Benchmark", "tests\JsonKnownTypes.Benchmark\JsonKnownTypes.Benchmark.csproj", "{F8736333-CFCC-4C27-9199-7EC2134AE462}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3DE82BA5-F66A-4E39-AC18-427D22778E32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DE82BA5-F66A-4E39-AC18-427D22778E32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DE82BA5-F66A-4E39-AC18-427D22778E32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8736333-CFCC-4C27-9199-7EC2134AE462}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8736333-CFCC-4C27-9199-7EC2134AE462}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8736333-CFCC-4C27-9199-7EC2134AE462}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8736333-CFCC-4C27-9199-7EC2134AE462}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
