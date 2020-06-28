@@ -116,6 +116,12 @@ For change default discriminator settings use:
 > `DiscriminatorFieldName` change default `"$type"` name to yours  
 
 > If `UseClassNameAsDiscriminator` is false you should to add `JsonKnownType` or `JsonKnownThisType` attribute for each relative class manualy or it throw an Exception
+
+If you need to find derived types in another assembly you can set your `Func<Type, Type[]>`
+```c#
+  JsonKnownTypesSettingsManager.GetDerivedByBase = 
+            parent => parent.Assembly.GetTypes();
+```
 ### Use manualy
 ```c#
   public class BaseClass { ... }
