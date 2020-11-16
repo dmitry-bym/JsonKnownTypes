@@ -62,7 +62,7 @@ Json representation:
 { ... "$type":"ChildClass" }
 ```
 ### JsonKnownType
-If you need to add custom discriminator just use `JsonKnowType` attribute.  
+If you need to add custom discriminator just use `JsonKnownType` attribute.  
 By default for discriminattor property using `"$type"` name, if you need to change it use `JsonDiscriminator` attribute. 
 ```c#
   [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
