@@ -12,6 +12,12 @@ namespace JsonKnownTypes
                 var discriminator = attr.Discriminator ?? attr.Type.Name;
                 discriminatorValues.AddType(attr.Type, discriminator);
             }
+
+            var fallbackTypeAttribute = AttributesManager.GetJsonKnownTypeFallbackAttribute(typeof(T));
+            if (fallbackTypeAttribute != null)
+            {
+                discriminatorValues.AddFallbackType(fallbackTypeAttribute.FallbackType);
+            }
         }
 
         internal static void AddJsonKnownThis(this DiscriminatorValues discriminatorValues, Type[] inherited)
@@ -31,7 +37,7 @@ namespace JsonKnownTypes
         {
             foreach (var type in inherited)
             {
-                if(discriminatorValues.Contains(type))
+                if (discriminatorValues.Contains(type))
                     continue;
 
                 discriminatorValues.AddType(type, type.Name);

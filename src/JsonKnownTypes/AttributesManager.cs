@@ -12,5 +12,8 @@ namespace JsonKnownTypes
 
         internal static JsonDiscriminatorAttribute GetJsonDiscriminatorAttribute(Type type) =>
             (JsonDiscriminatorAttribute)Attribute.GetCustomAttribute(type, typeof(JsonDiscriminatorAttribute));
+        
+        internal static JsonKnownTypeFallbackAttribute GetJsonKnownTypeFallbackAttribute(Type type) =>
+            (JsonKnownTypeFallbackAttribute)Attribute.GetCustomAttribute(type, typeof(JsonKnownTypeFallbackAttribute));
     }
 }

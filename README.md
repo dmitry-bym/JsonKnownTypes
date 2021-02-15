@@ -3,7 +3,7 @@
 [![downloads](https://img.shields.io/nuget/dt/JsonKnownTypes?style=flat-square)](https://www.nuget.org/packages/JsonKnownTypes)
 [![lisence](https://img.shields.io/badge/lisence-MIT-green?style=flat-square)](https://github.com/dmitry-bym/JsonKnownTypes/blob/master/LICENSE)
 
-Help to serialize and deserialize polymorphic types. Add discriminator to json
+Helps to serialize and deserialize polymorphic types. Adds discriminator to json.
 
 - [Documentation](#Documentation)
 - [License](#License)
@@ -14,23 +14,23 @@ Help to serialize and deserialize polymorphic types. Add discriminator to json
 
 ## Documentation
 ### Getting started
-There is simple way to use just add one attribute to base class or interface
+The simplest way to use it is to add one attribute to base class or interface:
 ```c#
-  [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
-  public class BaseClass
-  {
+[JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
+public class BaseClass
+{
     public string Summary { get; set; }
-  }
+}
   
-  public class ChildClass : BaseClass
-  {
+public class ChildClass : BaseClass
+{
     public string Detailed { get; set; }
-  }
+}
 ```
 Serialization and Deserialization:
 ```c#
-  var entityJson = JsonConvert.SerializeObject(entity);
-  var obj = DeserializeObject<BaseClass>(entityJson)
+var entityJson = JsonConvert.SerializeObject(entity);
+var obj = DeserializeObject<BaseClass>(entityJson)
 ```
 Json representation:
 ```json
@@ -38,13 +38,13 @@ Json representation:
 { "Summary":"someValue", "Detailed":"someValue", "$type":"ChildClass" }
 ```
 ### Using with Interfaces or Abstract classes
-Also you can use it similar with interfaces or abstract classes
+Also, you can use it with interfaces or abstract classes:
 #### Interface
 ```c#
-  [JsonConverter(typeof(JsonKnownTypesConverter<IInterface>))]
-  public interface IInterface  { ... }
+[JsonConverter(typeof(JsonKnownTypesConverter<IInterface>))]
+public interface IInterface  { ... }
  
-  public class ChildClass : IInterface  { ... }
+public class ChildClass : IInterface  { ... }
 ```
 Json representation:
 ```
@@ -52,28 +52,28 @@ Json representation:
 ```
 #### Abstract class
 ```c#
-  [JsonConverter(typeof(JsonKnownTypesConverter<AbstractClass>))]
-  public abstract class AbstractClass  { ... }
+[JsonConverter(typeof(JsonKnownTypesConverter<AbstractClass>))]
+public abstract class AbstractClass  { ... }
  
-  public class ChildClass : AbstractClass  { ... }
+public class ChildClass : AbstractClass  { ... }
 ```
 Json representation:
 ```
 { ... "$type":"ChildClass" }
 ```
 ### JsonKnownType
-If you need to add custom discriminator just use `JsonKnownType` attribute.  
-By default for discriminattor property using `"$type"` name, if you need to change it use `JsonDiscriminator` attribute. 
+If you need to add a custom discriminator use `JsonKnownType` attribute.  
+By default, `"$type"` is used for discriminator property name, if you need to change that use `JsonDiscriminator` attribute.
 ```c#
-  [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
-  [JsonDiscriminator(Name = "myType")] //add custom discriminator name
-  [JsonKnownType(typeof(BaseClass1Heir))] //could be deleted if you didn't turn off UseClassNameAsDiscriminator
-  [JsonKnownType(typeof(BaseClass2Heir), "myDiscriminator")]
-  public class BaseClass { ... }
+[JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
+[JsonDiscriminator(Name = "myType")] //add custom discriminator name
+[JsonKnownType(typeof(BaseClass1Heir))] //could be deleted if you didn't turn off UseClassNameAsDiscriminator
+[JsonKnownType(typeof(BaseClass2Heir), "myDiscriminator")]
+public class BaseClass { ... }
   
-  public class BaseClass1Heir : BaseClass  { ... }
-  
-  public class BaseClass2Heir : BaseClass  { ... }
+public class BaseClass1Heir : BaseClass  { ... }
+ 
+public class BaseClass2Heir : BaseClass  { ... }
 ```
 Json representation:
 ```
@@ -84,17 +84,17 @@ Json representation:
 { ... , "myType":"myDiscriminator" }
 ```
 ### JsonKnownThisType
-Add discriminator for type which is used with it
+Add a discriminator for type which is used with it:
 ```c#
-  [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
-  [JsonKnownThisType("do_you_know_that")]
-  public class BaseClass { ... }
+[JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
+[JsonKnownThisType("do_you_know_that")]
+public class BaseClass { ... }
+
+[JsonKnownThisType("html_is_programming_language")]
+public class BaseClass1Heir : BaseClass  { ... }
   
-  [JsonKnownThisType("html_is_programming_language")]
-  public class BaseClass1Heir : BaseClass  { ... }
-  
-  [JsonKnownThisType("just_joke=)")]
-  public class BaseClass2Heir : BaseClass  { ... }
+[JsonKnownThisType("just_joke=)")]
+public class BaseClass2Heir : BaseClass  { ... }
 ```
 Json representation:
 ```
@@ -105,36 +105,67 @@ Json representation:
 { ... , "$type":"just_joke=)" }
 ```
 ### Configuration
-For change default discriminator settings use:
+To change default discriminator settings use:
 ```c#
-  JsonKnownTypesSettingsManager.DefaultDiscriminatorSettings = new JsonDiscriminatorSettings
-  {
+JsonKnownTypesSettingsManager.DefaultDiscriminatorSettings = new JsonDiscriminatorSettings
+{
     DiscriminatorFieldName = "name",
     UseClassNameAsDiscriminator = false
-  };
+};
 ```
 > `DiscriminatorFieldName` change default `"$type"` name to yours  
 
-> If `UseClassNameAsDiscriminator` is false you should to add `JsonKnownType` or `JsonKnownThisType` attribute for each relative class manualy or it throw an Exception
+> If `UseClassNameAsDiscriminator` is `false` you should add `JsonKnownType` or `JsonKnownThisType` attribute for each relative class manually otherwise it will throw an exception.
 
-If you need to find derived types in another assembly you can set your `Func<Type, Type[]>`
+If you want to add derived types from another assembly you can set custom type resolver `Func<Type, Type[]>`:
 ```c#
-  JsonKnownTypesSettingsManager.GetDerivedByBase = 
-            parent => parent.Assembly.GetTypes();
+JsonKnownTypesSettingsManager.GetDerivedByBase = parent => parent.Assembly.GetTypes();
 ```
-### Use manualy
+### Use manually
 ```c#
-  public class BaseClass { ... }
-  public class BaseAbstractClass1Heir : BaseClass  { ... }
-  public class BaseAbstractClass2Heir : BaseClass  { ... }
+public class BaseClass { ... }
+public class BaseAbstractClass1Heir : BaseClass  { ... }
+public class BaseAbstractClass2Heir : BaseClass  { ... }
 ```
 ```c#
-  var converter = new JsonKnownTypesConverter<BaseClass>()
+var converter = new JsonKnownTypesConverter<BaseClass>()
   
-  var entityJson = JsonConvert.SerializeObject(entity, converter);
-  var obj = DeserializeObject<BaseClass>(entityJson, converter)
+var entityJson = JsonConvert.SerializeObject(entity, converter);
+var obj = DeserializeObject<BaseClass>(entityJson, converter)
 ```
-> Need to add converter to method just if you don't use `JsonConverter` attribute
+> You have to pass a converter directly to method if you do not use `JsonConverter` attribute.
+### Fallback type deserialization
+Normally you will receive an exception during deserialization of models marked with unknown or
+unspecified type discriminator. If you need an exception-free way you can use `JsonKnownTypeFallback` attribute.
+In that case entities marked with unknown or missing type discriminator will be deserialized to specified fallback type.
+See example.
+
+Assume you have a bunch of events coming from webhook/frontend/etc.:
+```json5
+[
+  { id: "abc", opType: "op_start" },
+  { id: "bcd", opType: "on_save" },
+  { id: "cde", opType: "op_update" },
+  { id: "def", opType: "op_end" }
+]
+```
+Then in your application you can do the following to handle only events you are only interested of:
+```c#
+[JsonConverter(typeof(JsonKnownTypesConverter<OperationBase>))]
+[JsonDiscriminator(Name = "opType")]
+[JsonKnownType(typeof(OperationStarted), "op_start")]
+[JsonKnownType(typeof(OperationEnded), "op_end")]
+[JsonKnownTypeFallback(typeof(UnsupportedOperation))]
+public abstract class OperationBase
+{
+    public string Id { get; set; }
+}
+
+public class OperationStarted : OperationBase { }
+public class OperationEnded : OperationBase { }
+public class UnsupportedOperation : OperationBase { }
+```
+
 ## License
 
 Authored by: Dmitry Kaznacheev (dmitry-bym)
