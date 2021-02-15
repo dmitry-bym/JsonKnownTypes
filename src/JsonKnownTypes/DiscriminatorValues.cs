@@ -7,43 +7,81 @@ namespace JsonKnownTypes
     internal class DiscriminatorValues
     {
         public string FieldName { get; }
-        private Dictionary<string, Type> DiscriminatorToType { get; }
-        private Dictionary<Type, string> TypeToDiscriminator { get; }
+        private readonly Dictionary<string, Type> _discriminatorToType;
+        private readonly Dictionary<Type, string> _typeToDiscriminator;
+        public Type FallbackType { get; private set; }
 
         public DiscriminatorValues(string fieldName)
         {
             FieldName = fieldName;
-            DiscriminatorToType = new Dictionary<string, Type>();
-            TypeToDiscriminator = new Dictionary<Type, string>();
+            _discriminatorToType = new Dictionary<string, Type>();
+            _typeToDiscriminator = new Dictionary<Type, string>();
         }
 
-        public int Count
-        {
-            get => TypeToDiscriminator.Count;
-        }
+        public int Count => _typeToDiscriminator.Count;
 
-        public bool TryGetDiscriminator(Type type, out string discriminator) 
-            => TypeToDiscriminator.TryGetValue(type, out discriminator);
+        public bool TryGetDiscriminator(Type type, out string discriminator)
+            => _typeToDiscriminator.TryGetValue(type, out discriminator);
 
         public bool TryGetType(string discriminator, out Type type)
-            => DiscriminatorToType.TryGetValue(discriminator, out type);
+        {
+            var discriminatorIsNull = discriminator == null;
+            var fallbackTypeExists = FallbackType != null;
 
-        public bool Contains(Type type) 
-            => TypeToDiscriminator.ContainsKey(type);
+            Type existingType = null;
+            // ReSharper disable once SimplifyConditionalTernaryExpression
+            var typeExists = discriminatorIsNull
+                ? false
+                : _discriminatorToType.TryGetValue(discriminator, out existingType);
 
-        public bool Contains(string discriminator) 
-            => DiscriminatorToType.ContainsKey(discriminator);
+            switch (discriminatorIsNull, fallbackTypeExists, typeExists)
+            {
+                case (true, true, _):
+                    type = FallbackType;
+                    return true;
+
+                case (false, _, true):
+                    type = existingType;
+                    return true;
+
+                case (false, true, false):
+                    type = FallbackType;
+                    return true;
+
+                default:
+                    type = null;
+                    return false;
+            }
+        }
+
+        public bool Contains(Type type) => _typeToDiscriminator.ContainsKey(type);
+
+        public bool Contains(string discriminator) => _discriminatorToType.ContainsKey(discriminator);
 
         public void AddType(Type type, string discriminator)
         {
-            if (TypeToDiscriminator.ContainsKey(type))
+            if (type == null)
+                throw new JsonKnownTypesException("null passed as type");
+
+            if (string.IsNullOrWhiteSpace(discriminator))
+                throw new JsonKnownTypesException($"Invalid discriminator for {type} type");
+
+            if (_typeToDiscriminator.ContainsKey(type))
                 throw new JsonKnownTypesException($"{type} type already registered");
 
-            if (DiscriminatorToType.ContainsKey(discriminator))
+            if (_discriminatorToType.ContainsKey(discriminator))
                 throw new JsonKnownTypesException($"{discriminator} discriminator already in use");
 
-            TypeToDiscriminator.Add(type, discriminator);
-            DiscriminatorToType.Add(discriminator, type);
+            _typeToDiscriminator.Add(type, discriminator);
+            _discriminatorToType.Add(discriminator, type);
+        }
+
+        public void AddFallbackType(Type type)
+        {
+            if (FallbackType != null)
+                throw new JsonKnownTypesException($"{FallbackType} fallback type is already registered");
+
+            FallbackType = type;
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using JsonKnownTypes.Exceptions;
 using Newtonsoft.Json;
@@ -32,8 +31,6 @@ namespace JsonKnownTypes
             return false;
         }
 
-        public List<string> list = new List<string>();
-
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null) return null;
@@ -41,9 +38,6 @@ namespace JsonKnownTypes
             var jObject = JObject.Load(reader);
 
             var discriminator = jObject[_typesDiscriminatorValues.FieldName]?.Value<string>();
-
-            if (string.IsNullOrEmpty(discriminator))
-                throw new JsonKnownTypesException($"There is no discriminator fields with {_typesDiscriminatorValues.FieldName} name in json string or it is empty.");
 
             if (_typesDiscriminatorValues.TryGetType(discriminator, out var typeForObject))
             {
@@ -57,7 +51,8 @@ namespace JsonKnownTypes
                 return obj;
             }
 
-            throw new JsonKnownTypesException($"{discriminator} discriminator is not registered for {nameof(T)} type");
+            var discriminatorName = string.IsNullOrWhiteSpace(discriminator) ? "<empty-string>" : discriminator;
+            throw new JsonKnownTypesException($"{discriminatorName} discriminator is not registered for {nameof(T)} type");
         }
 
         private readonly ThreadLocal<bool> _isInWrite = new ThreadLocal<bool>();
@@ -83,6 +78,15 @@ namespace JsonKnownTypes
             }
 
             var objectType = value.GetType();
+
+            if (_typesDiscriminatorValues.FallbackType != null && objectType == _typesDiscriminatorValues.FallbackType)
+            {
+                _isInWrite.Value = true;
+                
+                serializer.Serialize(writer, value, objectType);
+                return;
+            }
+            
             if (_typesDiscriminatorValues.TryGetDiscriminator(objectType, out var discriminator))
             {
                 _isInWrite.Value = true;
