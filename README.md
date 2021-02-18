@@ -1,5 +1,5 @@
 # JsonKnownTypes .Net Standard
-[![nuget](https://img.shields.io/badge/nuget-v0.4.2-orange?style=flat-square)](https://www.nuget.org/packages/JsonKnownTypes)
+[![nuget](https://img.shields.io/badge/nuget-v0.5.2-orange?style=flat-square)](https://www.nuget.org/packages/JsonKnownTypes)
 [![downloads](https://img.shields.io/nuget/dt/JsonKnownTypes?style=flat-square)](https://www.nuget.org/packages/JsonKnownTypes)
 [![lisence](https://img.shields.io/badge/lisence-MIT-green?style=flat-square)](https://github.com/dmitry-bym/JsonKnownTypes/blob/master/LICENSE)
 
