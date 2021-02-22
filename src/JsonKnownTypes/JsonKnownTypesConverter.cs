@@ -46,9 +46,16 @@ namespace JsonKnownTypes
                 if (objectType == typeForObject)
                     _isInRead.Value = true;
 
-                var obj = serializer.Deserialize(jsonReader, typeForObject);
+                try
+                {
+                    var obj = serializer.Deserialize(jsonReader, typeForObject);
 
-                return obj;
+                    return obj;
+                }
+                finally
+                {
+                    _isInRead.Value = false;
+                }
             }
 
             var discriminatorName = string.IsNullOrWhiteSpace(discriminator) ? "<empty-string>" : discriminator;
@@ -82,17 +89,31 @@ namespace JsonKnownTypes
             if (_typesDiscriminatorValues.FallbackType != null && objectType == _typesDiscriminatorValues.FallbackType)
             {
                 _isInWrite.Value = true;
-                
-                serializer.Serialize(writer, value, objectType);
-                return;
+
+                try
+                {
+                    serializer.Serialize(writer, value, objectType);
+                    return;
+                }
+                finally
+                {
+                    _isInWrite.Value = false;
+                }
             }
-            
+
             if (_typesDiscriminatorValues.TryGetDiscriminator(objectType, out var discriminator))
             {
-                _isInWrite.Value = true;
+                try
+                {
+                    _isInWrite.Value = true;
 
-                var writerProxy = new JsonKnownProxyWriter(_typesDiscriminatorValues.FieldName, discriminator, writer);
-                serializer.Serialize(writerProxy, value, objectType);
+                    var writerProxy = new JsonKnownProxyWriter(_typesDiscriminatorValues.FieldName, discriminator, writer);
+                    serializer.Serialize(writerProxy, value, objectType);
+                }
+                finally
+                {
+                    _isInWrite.Value = false;
+                }
             }
             else
             {

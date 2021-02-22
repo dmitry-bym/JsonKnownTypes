@@ -21,7 +21,7 @@ namespace JsonKnownTypes.UnitTests
         public class MemberLevelDesializerTestClass
         {
             [JsonConverter(typeof(JsonKnownTypesConverter<BaseType>))]
-            public BaseType BaseType { get; set; }
+            public BaseType BaseTypeProperty { get; set; }
         }
 
         private string Serialize<T>(JsonSerializer serializer, T instance)
@@ -55,7 +55,7 @@ namespace JsonKnownTypes.UnitTests
 
             for (int count = 0; count < 5; count++)
             {
-                var serialized = Serialize(jsonSerializer, new MemberLevelDesializerTestClass { BaseType = new DerivedType { BaseField = count, DerivedField = count } });
+                var serialized = Serialize(jsonSerializer, new MemberLevelDesializerTestClass { BaseTypeProperty = new DerivedType { BaseField = count, DerivedField = count } });
 
                 Assert.DoesNotThrow(() => Deserialize<MemberLevelDesializerTestClass>(jsonSerializer, serialized));
             }
@@ -66,7 +66,7 @@ namespace JsonKnownTypes.UnitTests
         {
             for (int count = 0; count < 5; count++)
             {
-                var serialized = JsonConvert.SerializeObject(new MemberLevelDesializerTestClass { BaseType = new DerivedType { BaseField = count, DerivedField = count } });
+                var serialized = JsonConvert.SerializeObject(new MemberLevelDesializerTestClass { BaseTypeProperty = new DerivedType { BaseField = count, DerivedField = count } });
 
                 Assert.DoesNotThrow(() => JsonConvert.DeserializeObject<MemberLevelDesializerTestClass>(serialized));
             }
