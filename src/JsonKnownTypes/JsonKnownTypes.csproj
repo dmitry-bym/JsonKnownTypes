@@ -23,7 +23,7 @@
     <PackageProjectUrl>https://github.com/dmitry-bym/JsonKnownTypes</PackageProjectUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
     <Copyright>Dmitry Kaznacheev</Copyright>
-    <RepositoryUrl>https://github.com/dmitry-bym/JsonKnownTypes</RepositoryUrl>
+    <RepositoryUrl>https://github.com/ibebbs/JsonKnownTypes</RepositoryUrl>
     <PackageTags>json known polymorphic types</PackageTags>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>

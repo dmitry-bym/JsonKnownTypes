@@ -1,0 +1,31 @@
+name: .NET Core
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.5
+      with:
+        nuget-version: latest
+    - name: Install dependencies
+      run: dotnet restore ./src/JsonKnownTypes/JsonKnownTypes.csproj
+    - name: Build
+      run: dotnet build ./src/JsonKnownTypes/JsonKnownTypes.csproj --configuration Release --no-restore
+    - name: Pack
+      run: dotnet pack ./src/JsonKnownTypes/JsonKnownTypes.csproj -p:PackageVersion=0.6.$GITHUB_RUN_NUMBER --configuration Release -o nupkg --no-build
+    - name: Push to GitHub Packages
+      run: nuget push nupkg/*.nupkg -Source "https://nuget.pkg.github.com/ibebbs/index.json" -ApiKey ${{ secrets.GITHUB_TOKEN }}
