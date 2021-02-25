@@ -10,9 +10,6 @@ namespace JsonKnownTypes
     {
         public Type BaseType { get; }
 
-        public JsonKnownBaseTypeAttribute()
-        { }
-
         public JsonKnownBaseTypeAttribute(Type baseType)
         {
             BaseType = baseType;

@@ -34,7 +34,7 @@ namespace JsonKnownTypes
             var allTypes = GetFilteredDerived<T>();
             typeSettings.AddJsonKnownThis(allTypes);
 
-            if (discriminatorSettings.UseClassNameAsDiscriminator)
+            if (discriminatorSettings.AddAutoDiscriminators)
             {
                 typeSettings.AddAutoDiscriminators(allTypes);
             }

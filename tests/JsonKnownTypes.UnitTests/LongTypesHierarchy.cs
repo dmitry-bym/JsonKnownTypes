@@ -82,7 +82,7 @@ namespace JsonKnownTypes.UnitTests
         }
 
         [JsonConverter(typeof(JsonKnownTypesConverter<BaseClass>))]
-        [JsonDiscriminator(UseClassNameAsDiscriminator = false)]
+        [JsonDiscriminator(AddAutoDiscriminators = false)]
         [JsonKnownThisType]
         public class BaseClass
         {

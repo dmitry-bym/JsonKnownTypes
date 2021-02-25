@@ -1,12 +1,8 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace JsonKnownTypes.UnitTests.A
 {
-
     [JsonKnownThisType]
     public class ImplementingClass : IValue
     {
@@ -16,13 +12,12 @@ namespace JsonKnownTypes.UnitTests.A
 
 namespace JsonKnownTypes.UnitTests.B
 {
-
-    [JsonKnownThisType]
     public class ImplementingClass : A.ImplementingClass { }
 }
 
 namespace JsonKnownTypes.UnitTests
 {
+    [JsonDiscriminator(Name = "Type", AddAutoDiscriminators = false)]
     public interface IValue
     {
         string Value { get; }
@@ -39,13 +34,13 @@ namespace JsonKnownTypes.UnitTests
         [Test]
         public void ShouldBeAbleToDeserializeDerivedClassAsBaseClass()
         {
-            JsonKnownTypesSettingsManager.GetDerivedByBase = parent => new[] { typeof(A.ImplementingClass) };
+            //JsonKnownTypesSettingsManager.GetDerivedByBase = parent => new[] { typeof(A.ImplementingClass) };
 
             var container = new Container { Value = new B.ImplementingClass { Value = "Blah!" } };
 
             var serialized = JsonConvert.SerializeObject(container);
 
-            JsonKnownTypesSettingsManager.GetDerivedByBase = parent => new[] { typeof(A.ImplementingClass) };
+            //JsonKnownTypesSettingsManager.GetDerivedByBase = parent => new[] { typeof(A.ImplementingClass) };
 
             var actual = JsonConvert.DeserializeObject<Container>(serialized);
 
@@ -53,7 +48,7 @@ namespace JsonKnownTypes.UnitTests
             Assert.That(actual.Value.Value, Is.EqualTo("Blah!"));
 
             // Reset
-            JsonKnownTypesSettingsManager.GetDerivedByBase = parent => parent.Assembly.GetTypes();
+            //JsonKnownTypesSettingsManager.GetDerivedByBase = parent => parent.Assembly.GetTypes();
         }
     }
 }

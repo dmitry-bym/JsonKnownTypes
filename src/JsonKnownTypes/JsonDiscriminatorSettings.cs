@@ -8,8 +8,8 @@
         public string DiscriminatorFieldName { get; set; } = "$type";
 
         /// <summary>
-        /// Use class name as discriminator if JsonKnown attribute hasn't been added
+        /// Add all types regardless of whether they're decorated with JsonKnownType attributes
         /// </summary>
-        public bool UseClassNameAsDiscriminator { get; set; } = true;
+        public bool AddAutoDiscriminators { get; set; } = true;
     }
 }
