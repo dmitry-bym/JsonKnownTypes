@@ -27,7 +27,7 @@ namespace JsonKnownTypes
                 ? DefaultDiscriminatorSettings 
                 : Mapper.Map(discriminatorAttribute);
 
-            var typeSettings = new DiscriminatorValues(discriminatorSettings.DiscriminatorFieldName);
+            var typeSettings = new DiscriminatorValues(discriminatorSettings.DiscriminatorFieldName, discriminatorSettings.UseBaseTypeDescriminators);
 
             typeSettings.AddJsonKnown<T>();
 

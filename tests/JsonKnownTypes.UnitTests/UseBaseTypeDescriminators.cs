@@ -29,26 +29,19 @@ namespace JsonKnownTypes.UnitTests
         public IValue Value { get; set; }
     }
 
-    public class DerivedTypesWithSameDiscriminatorValue
+    public class UseBaseTypeDescriminators
     {
         [Test]
-        public void ShouldBeAbleToDeserializeDerivedClassAsBaseClass()
+        public void ShouldUseBaseClassDescriminatorToSerializeAndDeserialize()
         {
-            //JsonKnownTypesSettingsManager.GetDerivedByBase = parent => new[] { typeof(A.ImplementingClass) };
-
             var container = new Container { Value = new B.ImplementingClass { Value = "Blah!" } };
 
             var serialized = JsonConvert.SerializeObject(container);
-
-            //JsonKnownTypesSettingsManager.GetDerivedByBase = parent => new[] { typeof(A.ImplementingClass) };
 
             var actual = JsonConvert.DeserializeObject<Container>(serialized);
 
             Assert.That(actual.Value, Is.InstanceOf(typeof(A.ImplementingClass)));
             Assert.That(actual.Value.Value, Is.EqualTo("Blah!"));
-
-            // Reset
-            //JsonKnownTypesSettingsManager.GetDerivedByBase = parent => parent.Assembly.GetTypes();
         }
     }
 }

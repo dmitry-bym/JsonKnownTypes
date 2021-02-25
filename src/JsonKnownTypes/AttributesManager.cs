@@ -7,9 +7,6 @@ namespace JsonKnownTypes
         internal static JsonKnownTypeAttribute[] GetJsonKnownAttributes(Type type) =>
             (JsonKnownTypeAttribute[])Attribute.GetCustomAttributes(type, typeof(JsonKnownTypeAttribute));
 
-        internal static JsonKnownBaseTypeAttribute GetJsonKnownBaseAttribute(Type type) =>
-            (JsonKnownBaseTypeAttribute)Attribute.GetCustomAttribute(type, typeof(JsonKnownBaseTypeAttribute));
-
         internal static JsonKnownThisTypeAttribute GetJsonKnownThisAttribute(Type type) =>
             (JsonKnownThisTypeAttribute)Attribute.GetCustomAttribute(type, typeof(JsonKnownThisTypeAttribute));
 

@@ -20,34 +20,13 @@ namespace JsonKnownTypes
             }
         }
 
-        internal static bool GetJsonKnownThisAttribute(Type type, out JsonKnownThisTypeAttribute knownThisAttribute)
-        {
-            knownThisAttribute = AttributesManager.GetJsonKnownThisAttribute(type);
-
-            if (knownThisAttribute != null)
-            {
-                return true;
-            }
-            else
-            {
-                var knownBase = AttributesManager.GetJsonKnownBaseAttribute(type);
-
-                if (knownBase != null)
-                {
-                    return GetJsonKnownThisAttribute(knownBase.BaseType, out knownThisAttribute);
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
-
         internal static void AddJsonKnownThis(this DiscriminatorValues discriminatorValues, Type[] inherited)
         {
             foreach (var type in inherited)
             {
-                if (GetJsonKnownThisAttribute(type, out var attr))
+                var attr = AttributesManager.GetJsonKnownThisAttribute(type);
+
+                if (attr != null)
                 {
                     var discriminator = attr.Discriminator ?? type.Name;
                     discriminatorValues.AddType(type, discriminator);

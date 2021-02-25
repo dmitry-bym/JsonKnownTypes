@@ -76,15 +76,15 @@ namespace JsonKnownTypes
             return false;
         }
 
-        private bool TryGetDiscriminator(Type objectType, out string discriminator)
+        private bool TryGetDiscriminator(Type objectType, bool useBaseTypeDescriminators, out string discriminator)
         {
             if (_typesDiscriminatorValues.TryGetDiscriminator(objectType, out discriminator))
             {
                 return true;
             }
-            else if (objectType.BaseType != null)
+            else if (objectType.BaseType != null && useBaseTypeDescriminators)
             {
-                return TryGetDiscriminator(objectType.BaseType, out discriminator);
+                return TryGetDiscriminator(objectType.BaseType, useBaseTypeDescriminators, out discriminator);
             }
             else
             {
@@ -117,7 +117,7 @@ namespace JsonKnownTypes
                 }
             }
 
-            if (TryGetDiscriminator(objectType, out var discriminator))
+            if (TryGetDiscriminator(objectType, _typesDiscriminatorValues.UseBaseTypeDescriminators, out var discriminator))
             {
                 try
                 {

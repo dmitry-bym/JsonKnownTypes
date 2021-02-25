@@ -6,14 +6,18 @@ namespace JsonKnownTypes
 {
     internal class DiscriminatorValues
     {
-        public string FieldName { get; }
         private readonly Dictionary<string, Type> _discriminatorToType;
         private readonly Dictionary<Type, string> _typeToDiscriminator;
+
+        public string FieldName { get; }
+        public bool UseBaseTypeDescriminators { get; }
         public Type FallbackType { get; private set; }
 
-        public DiscriminatorValues(string fieldName)
+        public DiscriminatorValues(string fieldName, bool useBaseTypeDescriminators)
         {
             FieldName = fieldName;
+            UseBaseTypeDescriminators = useBaseTypeDescriminators;
+
             _discriminatorToType = new Dictionary<string, Type>();
             _typeToDiscriminator = new Dictionary<Type, string>();
         }
