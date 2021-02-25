@@ -17,7 +17,7 @@ namespace JsonKnownTypes.UnitTests.B
 
 namespace JsonKnownTypes.UnitTests
 {
-    [JsonDiscriminator(Name = "Type", AddAutoDiscriminators = false)]
+    [JsonDiscriminator(Name = "Type", AddAutoDiscriminators = false, UseBaseTypeDescriminators = true)]
     public interface IValue
     {
         string Value { get; }

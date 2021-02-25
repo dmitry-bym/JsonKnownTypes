@@ -21,6 +21,6 @@
         /// To use this setting effectively, <see cref="AddAutoDiscriminators"/> should be false and
         /// derived types should not be decorated with <see cref="JsonKnownThisTypeAttribute"/>
         /// </remarks>
-        public bool UseBaseTypeDescriminators { get; set; } = true;
+        public bool UseBaseTypeDescriminators { get; set; } = false;
     }
 }

@@ -133,7 +133,7 @@ namespace JsonKnownTypes
             }
             else
             {
-                throw new JsonKnownTypesException($"There is no discriminator for {objectType.Name} type");
+                throw new JsonKnownTypesException($"There is no discriminator for {objectType.Name} type. If {objectType.Name} is derived from a type that provides a discriminator value then you can try adding 'UseBaseTypeDescriminators = true' to the 'JsonDiscriminator' attribute for the type '{typeof(T).Name}'");
             }
         }
     }
