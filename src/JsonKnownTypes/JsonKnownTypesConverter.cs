@@ -76,6 +76,22 @@ namespace JsonKnownTypes
             return false;
         }
 
+        private bool TryGetDiscriminator(Type objectType, out string discriminator)
+        {
+            if (_typesDiscriminatorValues.TryGetDiscriminator(objectType, out discriminator))
+            {
+                return true;
+            }
+            else if (objectType.BaseType != null)
+            {
+                return TryGetDiscriminator(objectType.BaseType, out discriminator);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             if (value == null)
@@ -101,7 +117,7 @@ namespace JsonKnownTypes
                 }
             }
 
-            if (_typesDiscriminatorValues.TryGetDiscriminator(objectType, out var discriminator))
+            if (TryGetDiscriminator(objectType, out var discriminator))
             {
                 try
                 {
