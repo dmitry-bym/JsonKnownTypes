@@ -11,11 +11,11 @@ namespace JsonKnownTypes
     /// </summary>
     public class JsonKnownTypesConverter<T> : JsonConverter
     {
-        private readonly DiscriminatorValues _typesDiscriminatorValues
+        private static readonly DiscriminatorValues TypesDiscriminatorValues
             = JsonKnownTypesSettingsManager.GetDiscriminatorValues<T>();
 
         public override bool CanConvert(Type objectType)
-            => _typesDiscriminatorValues.Contains(objectType);
+            => TypesDiscriminatorValues.Contains(objectType);
 
         private readonly ThreadLocal<bool> _isInRead = new ThreadLocal<bool>();
 
@@ -28,31 +28,40 @@ namespace JsonKnownTypes
                 _isInRead.Value = false;
                 return true;
             }
+
             return false;
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+            JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null) return null;
 
             var jObject = JObject.Load(reader);
 
-            var discriminator = jObject[_typesDiscriminatorValues.FieldName]?.Value<string>();
+            var discriminator = jObject[TypesDiscriminatorValues.FieldName]?.Value<string>();
 
-            if (_typesDiscriminatorValues.TryGetType(discriminator, out var typeForObject))
+            if (TypesDiscriminatorValues.TryGetType(discriminator, out var typeForObject))
             {
                 var jsonReader = jObject.CreateReader();
 
                 if (objectType == typeForObject)
                     _isInRead.Value = true;
 
-                var obj = serializer.Deserialize(jsonReader, typeForObject);
-
-                return obj;
+                try
+                {
+                    var obj = serializer.Deserialize(jsonReader, typeForObject);
+                    return obj;
+                }
+                finally
+                {
+                    _isInRead.Value = false;
+                }
             }
 
             var discriminatorName = string.IsNullOrWhiteSpace(discriminator) ? "<empty-string>" : discriminator;
-            throw new JsonKnownTypesException($"{discriminatorName} discriminator is not registered for {nameof(T)} type");
+            throw new JsonKnownTypesException(
+                $"{discriminatorName} discriminator is not registered for {nameof(T)} type");
         }
 
         private readonly ThreadLocal<bool> _isInWrite = new ThreadLocal<bool>();
@@ -66,6 +75,7 @@ namespace JsonKnownTypes
                 _isInWrite.Value = false;
                 return true;
             }
+
             return false;
         }
 
@@ -79,20 +89,35 @@ namespace JsonKnownTypes
 
             var objectType = value.GetType();
 
-            if (_typesDiscriminatorValues.FallbackType != null && objectType == _typesDiscriminatorValues.FallbackType)
+            if (TypesDiscriminatorValues.FallbackType != null && objectType == TypesDiscriminatorValues.FallbackType)
             {
                 _isInWrite.Value = true;
-                
-                serializer.Serialize(writer, value, objectType);
+                try
+                {
+                    serializer.Serialize(writer, value, objectType);
+                }
+                finally
+                {
+                    _isInWrite.Value = false;
+                }
+
                 return;
             }
-            
-            if (_typesDiscriminatorValues.TryGetDiscriminator(objectType, out var discriminator))
+
+            if (TypesDiscriminatorValues.TryGetDiscriminator(objectType, out var discriminator))
             {
                 _isInWrite.Value = true;
 
-                var writerProxy = new JsonKnownProxyWriter(_typesDiscriminatorValues.FieldName, discriminator, writer);
-                serializer.Serialize(writerProxy, value, objectType);
+                var writerProxy = new JsonKnownProxyWriter(TypesDiscriminatorValues.FieldName, discriminator, writer);
+                
+                try
+                {
+                    serializer.Serialize(writerProxy, value, objectType);
+                }
+                finally
+                {
+                    _isInWrite.Value = false;
+                }
             }
             else
             {

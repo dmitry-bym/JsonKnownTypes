@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using JsonKnownTypes.Utils;
 
@@ -11,7 +12,6 @@ namespace JsonKnownTypes
         /// </summary>
         public static JsonDiscriminatorSettings DefaultDiscriminatorSettings { get; set; } =
             new JsonDiscriminatorSettings();
-
 
         /// <summary>
         /// Function for search derived classes (By default just in base class assembly)
