@@ -31,7 +31,7 @@ namespace JsonKnownTypes.UnitTests
 
         private void Should_throw_exception(BaseClassSameDiscriminator entity)
         {
-            Assert.Throws<System.TypeInitializationException>(delegate
+            Assert.Throws<JsonException>(delegate
             {
                 JsonConvert.SerializeObject(entity);
             });
