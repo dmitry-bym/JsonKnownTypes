@@ -11,9 +11,14 @@ namespace JsonKnownTypes
     /// </summary>
     public class JsonKnownTypesConverter<T> : JsonConverter
     {
-        private static readonly DiscriminatorValues TypesDiscriminatorValues
-            = JsonKnownTypesSettingsManager.GetDiscriminatorValues<T>();
+        private static readonly DiscriminatorValues TypesDiscriminatorValues;
 
+        static JsonKnownTypesConverter()
+        {
+            TypesDiscriminatorValues = JsonKnownTypesSettingsManager.GetDiscriminatorValues<T>();
+            JsonKnownTypesCache.TypeToDiscriminator.TryAdd(typeof(T), TypesDiscriminatorValues.FieldName);
+        }
+        
         public override bool CanConvert(Type objectType)
             => TypesDiscriminatorValues.Contains(objectType);
 
