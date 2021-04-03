@@ -9,6 +9,7 @@ Helps to serialize and deserialize polymorphic types. Adds discriminator to json
 
 - [Documentation](#Documentation)
 - [License](#License)
+- [Swashbuckle Support](https://github.com/dmitry-bym/JsonKnownTypes.Swashbuckle)
 
 ## Requirements
 - NET Standard 2.0 compatible project
