@@ -41,21 +41,44 @@ namespace JsonKnownTypes
             JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null) return null;
+            if (reader.TokenType != JsonToken.StartObject) return null;
 
-            var jObject = JObject.Load(reader);
+            var proxyReader = new JsonKnownProxyReader(reader);
 
-            var discriminator = jObject[TypesDiscriminatorValues.FieldName]?.Value<string>();
+            var t = new TokenInfo(proxyReader);
+            
+            var depth = proxyReader.Depth + 1;
+            string discriminator = null;
+            
+            while (true)
+            {
+                if (proxyReader.TokenType == JsonToken.PropertyName && depth == proxyReader.Depth)
+                {
+                    if ((string) proxyReader.Value == TypesDiscriminatorValues.FieldName)
+                    {
+                        proxyReader.ReadAndBuffer();
+                        discriminator = (string) proxyReader.Value;
+                        break;
+                    }
+                }
+
+                if(!proxyReader.ReadAndBuffer())
+                    break;
+                
+                if(depth > proxyReader.Depth)
+                    break;
+            }
 
             if (TypesDiscriminatorValues.TryGetType(discriminator, out var typeForObject))
             {
-                var jsonReader = jObject.CreateReader();
-
                 if (objectType == typeForObject)
                     _isInRead.Value = true;
 
                 try
                 {
-                    var obj = serializer.Deserialize(jsonReader, typeForObject);
+                    proxyReader.Read();
+                    var token = new TokenInfo(proxyReader);
+                    var obj = serializer.Deserialize(proxyReader, typeForObject);
                     return obj;
                 }
                 finally
