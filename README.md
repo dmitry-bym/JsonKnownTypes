@@ -169,6 +169,13 @@ public class OperationEnded : OperationBase { }
 public class UnsupportedOperation : OperationBase { }
 ```
 
+### Breaking changes
+Documented API can be changed, because it is `zero` version still. And I'm trying to find better solution and always add some fixes and this fixes also can change some behavior.
+
+There are a lot of undocumented public API and you can use it but i can change it any time. 
+
+So when you install new version check all of these. 
+
 ## License
 
 Authored by: Dmitry Kaznacheev (dmitry-bym)
