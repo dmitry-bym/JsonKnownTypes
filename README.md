@@ -9,7 +9,7 @@ Helps to serialize and deserialize polymorphic types. Adds discriminator to json
 
 - [Documentation](#Documentation)
 - [Breaking changes](#Breaking-changes)
-- [How to help us?](#How-to-help-us?)
+- [How to help us?](#How-to-help-us)
 - [License](#License)
 
 ## Swashbuckle Support
