@@ -17,6 +17,7 @@ namespace JsonKnownTypes
         {
             TypesDiscriminatorValues = JsonKnownTypesSettingsManager.GetDiscriminatorValues<T>();
             JsonKnownTypesCache.TypeToDiscriminator.TryAdd(typeof(T), TypesDiscriminatorValues.FieldName);
+            JsonKnownTypesCache.DiscriminatorValues.Add(TypesDiscriminatorValues);
         }
         
         public override bool CanConvert(Type objectType)
