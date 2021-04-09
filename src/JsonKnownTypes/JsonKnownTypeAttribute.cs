@@ -9,8 +9,8 @@ namespace JsonKnownTypes
     public class JsonKnownTypeAttribute : Attribute
     {
         public Type Type { get; }
+        
         public string Discriminator { get; }
-
 
         public JsonKnownTypeAttribute(Type type)
         {

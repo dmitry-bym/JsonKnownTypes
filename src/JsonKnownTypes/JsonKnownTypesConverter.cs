@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 namespace JsonKnownTypes
 {
     /// <summary>
-    /// Convert json using discriminator
+    /// Convert an object with discriminator to and from JSON
     /// </summary>
     public class JsonKnownTypesConverter<T> : JsonConverter
     {
