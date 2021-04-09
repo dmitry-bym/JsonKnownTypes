@@ -4,18 +4,21 @@ using JsonKnownTypes.Exceptions;
 
 namespace JsonKnownTypes
 {
-    internal class DiscriminatorValues
+    public class DiscriminatorValues
     {
         public string FieldName { get; }
+        public Type BaseType { get; }
         private readonly Dictionary<string, Type> _discriminatorToType;
         private readonly Dictionary<Type, string> _typeToDiscriminator;
+        
         public Type? FallbackType { get; private set; }
 
         public bool IsFallback(Type type) 
             => FallbackType != null && type == FallbackType;
 
-        public DiscriminatorValues(string fieldName)
+        public DiscriminatorValues(Type baseType, string fieldName)
         {
+            BaseType = baseType;
             FieldName = fieldName;
             _discriminatorToType = new Dictionary<string, Type>();
             _typeToDiscriminator = new Dictionary<Type, string>();

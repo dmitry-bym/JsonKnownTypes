@@ -8,7 +8,12 @@
 Helps to serialize and deserialize polymorphic types. Adds discriminator to json.
 
 - [Documentation](#Documentation)
+- [Breaking changes](#Breaking-changes)
+- [How to help us?](#How-to-help-us)
 - [License](#License)
+
+## Swashbuckle Support
+To add discriminator to swagger(OpenAPI) scheme use this package [JsonKnownTypes.Swashbuckle](https://github.com/dmitry-bym/JsonKnownTypes.Swashbuckle)
 
 ## Requirements
 - NET Standard 2.0 compatible project
@@ -167,6 +172,19 @@ public class OperationStarted : OperationBase { }
 public class OperationEnded : OperationBase { }
 public class UnsupportedOperation : OperationBase { }
 ```
+
+### Breaking changes
+Documented API can be changed, because it is `zero` version still. And I'm trying to find better solution and always add some fixes and this fixes also can change some behavior.
+
+There are a lot of undocumented public API and you can use it but i can change it any time. 
+
+So when you install new version check all of these. 
+
+## How to help us?
+
+I need feedback, if you have suggestion or some issue create an issue and describe it, even if you think it's not critical. 
+
+Also you can buy me a coffee 🤗
 
 ## License
 

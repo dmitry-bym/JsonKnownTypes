@@ -36,6 +36,7 @@ namespace JsonKnownTypes
             JsonKnownTypesReaderFactory = new JsonKnownTypesReaderFactory();
             TypesDiscriminatorValues = JsonKnownTypesSettingsManager.GetDiscriminatorValues<T>();
             JsonKnownTypesCache.TypeToDiscriminator.TryAdd(typeof(T), TypesDiscriminatorValues.FieldName);
+            JsonKnownTypesCache.DiscriminatorValues.Add(TypesDiscriminatorValues);
         }
         
         public override bool CanConvert(Type objectType)
@@ -172,7 +173,7 @@ namespace JsonKnownTypes
                 _isInWrite.Value = true;
                 try
                 {
-                    serializer.Serialize(writer, value, objectType);
+                    serializer.Serialize(writer, value);
                 }
                 finally
                 {
@@ -196,7 +197,7 @@ namespace JsonKnownTypes
                 
                 try
                 {
-                    serializer.Serialize(writerProxy, value, objectType);
+                    serializer.Serialize(writerProxy, value);
                 }
                 finally
                 {

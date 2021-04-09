@@ -7,5 +7,8 @@ namespace JsonKnownTypes
     {
         public static ConcurrentDictionary<Type, string> TypeToDiscriminator 
             = new ConcurrentDictionary<Type, string>();
+
+        public static ConcurrentBag<DiscriminatorValues> DiscriminatorValues = 
+            new ConcurrentBag<DiscriminatorValues>();
     }
 }
