@@ -6,15 +6,34 @@ using Newtonsoft.Json.Linq;
 
 namespace JsonKnownTypes
 {
+    public class JsonKnownTypesReaderFactory
+    {
+        public JsonKnownTypesReaderFactory()
+        { }
+
+        public JsonKnownProxyReader GetOrCreate(JsonReader reader)
+        {
+            switch (reader)
+            {
+                case JsonKnownProxyReader pr:
+                    return pr;
+                default:
+                    return new JsonKnownProxyReader(reader);
+            }
+        }
+    }
+    
     /// <summary>
     /// Convert json using discriminator
     /// </summary>
     public class JsonKnownTypesConverter<T> : JsonConverter
     {
         private static readonly DiscriminatorValues TypesDiscriminatorValues;
+        private static readonly JsonKnownTypesReaderFactory JsonKnownTypesReaderFactory;
 
         static JsonKnownTypesConverter()
         {
+            JsonKnownTypesReaderFactory = new JsonKnownTypesReaderFactory();
             TypesDiscriminatorValues = JsonKnownTypesSettingsManager.GetDiscriminatorValues<T>();
             JsonKnownTypesCache.TypeToDiscriminator.TryAdd(typeof(T), TypesDiscriminatorValues.FieldName);
         }
@@ -37,27 +56,16 @@ namespace JsonKnownTypes
             return false;
         }
 
-        public override object? ReadJson(JsonReader reader, Type objectType, object existingValue,
-            JsonSerializer serializer)
+        protected virtual string ReadDiscriminator(JsonKnownProxyReader reader, string discriminatorFieldName)
         {
-            if (reader.TokenType == JsonToken.Null) return null;
-            if (reader.TokenType != JsonToken.StartObject) return null;
-
-            JsonKnownProxyReader proxyReader;
-            if (reader is JsonKnownProxyReader r)
-                proxyReader = r;
-            else
-                proxyReader = new JsonKnownProxyReader(reader);
-
-            
-            var depth = proxyReader.Depth + 1;
+            var depth = reader.Depth + 1;
             string? discriminator = null;
-            if (proxyReader.Buffer.Count > 0)
+            if (reader.Buffer.Count > 0)
             {
                 var i = 0;
-                while (i < proxyReader.Buffer.Count)
+                while (i < reader.Buffer.Count)
                 {
-                    var info = proxyReader.Buffer[i];
+                    var info = reader.Buffer[i];
                     
                     if(depth > info.Depth)
                         break;
@@ -66,10 +74,10 @@ namespace JsonKnownTypes
                     {
                         if ((string?) info.Value == TypesDiscriminatorValues.FieldName)
                         {
-                            if (i + 1 > proxyReader.Buffer.Count)
+                            if (i + 1 > reader.Buffer.Count)
                                 break;
                             
-                            discriminator = (string?)proxyReader.Buffer[i + 1].Value;
+                            discriminator = (string?)reader.Buffer[i + 1].Value;
                             break;
                         }
                     }
@@ -81,25 +89,37 @@ namespace JsonKnownTypes
             {
                 while (true)
                 {
-                    if (proxyReader.TokenType == JsonToken.PropertyName && depth == proxyReader.Depth)
+                    if (reader.TokenType == JsonToken.PropertyName && depth == reader.Depth)
                     {
-                        if ((string?) proxyReader.Value == TypesDiscriminatorValues.FieldName)
+                        if ((string?) reader.Value == TypesDiscriminatorValues.FieldName)
                         {
-                            proxyReader.ReadAndBuffer();
-                            discriminator = (string) proxyReader.Value;
-                            proxyReader.ReadAndBuffer();
+                            reader.ReadAndBuffer();
+                            discriminator = (string) reader.Value;
+                            reader.ReadAndBuffer();
                             break;
                         }
                     }
 
-                    if(!proxyReader.ReadAndBuffer())
+                    if(!reader.ReadAndBuffer())
                         break;
                 
-                    if(depth > proxyReader.Depth)
+                    if(depth > reader.Depth)
                         break;
                 }
             }
             
+            reader.SetCursorToFirstInBuffer();
+            return discriminator;
+        }
+
+        public override object? ReadJson(JsonReader reader, Type objectType, object existingValue,
+            JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+            if (reader.TokenType != JsonToken.StartObject) return null;
+
+            var proxyReader = JsonKnownTypesReaderFactory.GetOrCreate(reader);
+            var discriminator = ReadDiscriminator(proxyReader, TypesDiscriminatorValues.FieldName);
 
             if (TypesDiscriminatorValues.TryGetType(discriminator, out var typeForObject))
             {
@@ -108,7 +128,6 @@ namespace JsonKnownTypes
 
                 try
                 {
-                    proxyReader.SetCursorToFirstInBuffer();
                     var obj = serializer.Deserialize(proxyReader, typeForObject);
                     return obj;
                 }
