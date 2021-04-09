@@ -9,7 +9,10 @@ namespace JsonKnownTypes
         public string FieldName { get; }
         private readonly Dictionary<string, Type> _discriminatorToType;
         private readonly Dictionary<Type, string> _typeToDiscriminator;
-        public Type FallbackType { get; private set; }
+        public Type? FallbackType { get; private set; }
+
+        public bool IsFallback(Type type) 
+            => FallbackType != null && type == FallbackType;
 
         public DiscriminatorValues(string fieldName)
         {
@@ -23,12 +26,12 @@ namespace JsonKnownTypes
         public bool TryGetDiscriminator(Type type, out string discriminator)
             => _typeToDiscriminator.TryGetValue(type, out discriminator);
 
-        public bool TryGetType(string discriminator, out Type type)
+        public bool TryGetType(string? discriminator, out Type? type)
         {
             var discriminatorIsNull = discriminator == null;
             var fallbackTypeExists = FallbackType != null;
 
-            Type existingType = null;
+            Type? existingType = null;
             // ReSharper disable once SimplifyConditionalTernaryExpression
             var typeExists = discriminatorIsNull
                 ? false
@@ -54,11 +57,13 @@ namespace JsonKnownTypes
             }
         }
 
-        public bool Contains(Type type) => _typeToDiscriminator.ContainsKey(type);
+        public bool Contains(Type type) 
+            => _typeToDiscriminator.ContainsKey(type);
 
-        public bool Contains(string discriminator) => _discriminatorToType.ContainsKey(discriminator);
+        public bool Contains(string discriminator) 
+            => _discriminatorToType.ContainsKey(discriminator);
 
-        public void AddType(Type type, string discriminator)
+        public void AddType(Type? type, string? discriminator)
         {
             if (type == null)
                 throw new JsonKnownTypesException("null passed as type");
@@ -76,8 +81,11 @@ namespace JsonKnownTypes
             _discriminatorToType.Add(discriminator, type);
         }
 
-        public void AddFallbackType(Type type)
+        public void AddFallbackType(Type? type)
         {
+            if (type == null)
+                throw new JsonKnownTypesException("null passed as type");
+            
             if (FallbackType != null)
                 throw new JsonKnownTypesException($"{FallbackType} fallback type is already registered");
 

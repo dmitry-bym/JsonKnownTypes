@@ -7,17 +7,22 @@ namespace JsonKnownTypes
 {
     internal class JsonKnownProxyWriter : JsonWriter
     {
-        private readonly string _fieldName;
-        private readonly string _disc;
+        private string? _fieldName;
+        private string? _disc;
         private bool _discriminatorWritten;
         private readonly JsonWriter _writer;
 
-        public JsonKnownProxyWriter(string fieldName, string disc, JsonWriter writer)
+        public JsonKnownProxyWriter(JsonWriter writer)
         {
-            _discriminatorWritten = false;
+            _discriminatorWritten = true;
+            _writer = writer;
+        }
+
+        public void SetDiscriminator(string fieldName, string disc)
+        {
             _fieldName = fieldName;
             _disc = disc;
-            _writer = writer;
+            _discriminatorWritten = false;
         }
 
         public override void WriteStartObject()
@@ -26,7 +31,7 @@ namespace JsonKnownTypes
             
             if (_discriminatorWritten == false)
             {
-                _writer.WritePropertyName(_fieldName);
+                _writer.WritePropertyName(_fieldName!);
                 _writer.WriteValue(_disc);
                 _discriminatorWritten = true;
             }

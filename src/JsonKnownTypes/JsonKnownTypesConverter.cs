@@ -37,37 +37,69 @@ namespace JsonKnownTypes
             return false;
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+        public override object? ReadJson(JsonReader reader, Type objectType, object existingValue,
             JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null) return null;
             if (reader.TokenType != JsonToken.StartObject) return null;
 
-            var proxyReader = new JsonKnownProxyReader(reader);
+            JsonKnownProxyReader proxyReader;
+            if (reader is JsonKnownProxyReader r)
+                proxyReader = r;
+            else
+                proxyReader = new JsonKnownProxyReader(reader);
 
-            var t = new TokenInfo(proxyReader);
             
             var depth = proxyReader.Depth + 1;
-            string discriminator = null;
-            
-            while (true)
+            string? discriminator = null;
+            if (proxyReader.Buffer.Count > 0)
             {
-                if (proxyReader.TokenType == JsonToken.PropertyName && depth == proxyReader.Depth)
+                var i = 0;
+                while (i < proxyReader.Buffer.Count)
                 {
-                    if ((string) proxyReader.Value == TypesDiscriminatorValues.FieldName)
-                    {
-                        proxyReader.ReadAndBuffer();
-                        discriminator = (string) proxyReader.Value;
+                    var info = proxyReader.Buffer[i];
+                    
+                    if(depth > info.Depth)
                         break;
-                    }
-                }
 
-                if(!proxyReader.ReadAndBuffer())
-                    break;
-                
-                if(depth > proxyReader.Depth)
-                    break;
+                    if (info.TokenType == JsonToken.PropertyName && depth == info.Depth)
+                    {
+                        if ((string?) info.Value == TypesDiscriminatorValues.FieldName)
+                        {
+                            if (i + 1 > proxyReader.Buffer.Count)
+                                break;
+                            
+                            discriminator = (string?)proxyReader.Buffer[i + 1].Value;
+                            break;
+                        }
+                    }
+
+                    i++;
+                } 
             }
+            else
+            {
+                while (true)
+                {
+                    if (proxyReader.TokenType == JsonToken.PropertyName && depth == proxyReader.Depth)
+                    {
+                        if ((string?) proxyReader.Value == TypesDiscriminatorValues.FieldName)
+                        {
+                            proxyReader.ReadAndBuffer();
+                            discriminator = (string) proxyReader.Value;
+                            proxyReader.ReadAndBuffer();
+                            break;
+                        }
+                    }
+
+                    if(!proxyReader.ReadAndBuffer())
+                        break;
+                
+                    if(depth > proxyReader.Depth)
+                        break;
+                }
+            }
+            
 
             if (TypesDiscriminatorValues.TryGetType(discriminator, out var typeForObject))
             {
@@ -76,8 +108,7 @@ namespace JsonKnownTypes
 
                 try
                 {
-                    proxyReader.Read();
-                    var token = new TokenInfo(proxyReader);
+                    proxyReader.SetCursorToFirstInBuffer();
                     var obj = serializer.Deserialize(proxyReader, typeForObject);
                     return obj;
                 }
@@ -107,7 +138,7 @@ namespace JsonKnownTypes
             return false;
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
             if (value == null)
             {
@@ -117,7 +148,7 @@ namespace JsonKnownTypes
 
             var objectType = value.GetType();
 
-            if (TypesDiscriminatorValues.FallbackType != null && objectType == TypesDiscriminatorValues.FallbackType)
+            if (TypesDiscriminatorValues.IsFallback(objectType))
             {
                 _isInWrite.Value = true;
                 try
@@ -136,7 +167,13 @@ namespace JsonKnownTypes
             {
                 _isInWrite.Value = true;
 
-                var writerProxy = new JsonKnownProxyWriter(TypesDiscriminatorValues.FieldName, discriminator, writer);
+                JsonKnownProxyWriter writerProxy;
+                if (writer is JsonKnownProxyWriter r)
+                    writerProxy = r;
+                else
+                    writerProxy = new JsonKnownProxyWriter(writer);
+                
+                writerProxy.SetDiscriminator(TypesDiscriminatorValues.FieldName, discriminator);
                 
                 try
                 {
