@@ -61,9 +61,21 @@ namespace JsonKnownTypes.UnitTests
 
             discriminatorValues.AddType(typeof(TestRecord), nameof(TestRecord));
 
-            var result = discriminatorValues.Contains(nameof(TestHeir));
+            var result = discriminatorValues.Contains(nameof(TestRecord));
             
             Assert.True(result);
+        }
+        
+        [Test]
+        public void IncorrectContains()
+        {
+            var discriminatorValues = new DiscriminatorValues(typeof(TestRecord), "name");
+
+            discriminatorValues.AddType(typeof(TestRecord), nameof(TestRecord));
+
+            var result = discriminatorValues.Contains(nameof(TestHeir));
+            
+            Assert.False(result);
         }
     }
 }
