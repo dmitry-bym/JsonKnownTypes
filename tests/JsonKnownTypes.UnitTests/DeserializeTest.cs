@@ -10,6 +10,7 @@ namespace JsonKnownTypes.UnitTests
         [Test]
         [TestCase("{\"field\":\"value\"}")]
         [TestCase("{\"field\":\"value\", \"disc\":\"\"}")]
+        [TestCase("{\"field\":\"value\", \"disc\":\"unknowndisc\"}")]
         public void Deserialize_wi4thout_discriminator(string json) =>
             Assert.Throws<JsonKnownTypesException>(delegate
             {

@@ -3,12 +3,19 @@ using System.Collections.Concurrent;
 
 namespace JsonKnownTypes
 {
+    
     public static class JsonKnownTypesCache
     {
-        public static ConcurrentDictionary<Type, string> TypeToDiscriminator 
+        /// <summary>
+        /// Dictionary with base type as key and discriminator field name as value
+        /// </summary>
+        public static readonly ConcurrentDictionary<Type, string> TypeToDiscriminator 
             = new ConcurrentDictionary<Type, string>();
 
-        public static ConcurrentBag<DiscriminatorValues> DiscriminatorValues = 
+        /// <summary>
+        /// Bag with all discriminator values
+        /// </summary>
+        public static readonly ConcurrentBag<DiscriminatorValues> DiscriminatorValues = 
             new ConcurrentBag<DiscriminatorValues>();
     }
 }

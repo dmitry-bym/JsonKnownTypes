@@ -10,7 +10,6 @@ namespace JsonKnownTypes
     {
         public Type FallbackType { get; }
 
-        
         public JsonKnownTypeFallbackAttribute(Type fallbackType)
         {
             FallbackType = fallbackType ?? throw new ArgumentNullException(nameof(fallbackType));

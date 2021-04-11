@@ -14,7 +14,7 @@ namespace JsonKnownTypes
             new JsonDiscriminatorSettings();
 
         /// <summary>
-        /// Function for search derived classes (By default just in base class assembly)
+        /// Function for search derived classes (By default in base class assembly only)
         /// </summary>
         public static Func<Type, Type[]> GetDerivedByBase = 
             parent => parent.Assembly.GetTypes();

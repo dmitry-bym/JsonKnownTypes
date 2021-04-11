@@ -15,7 +15,7 @@ namespace JsonKnownTypes.UnitTests
                 Name = "Test0",
                 Children = new List<ClassWithClassBase>
                 {
-                    new ClassWithClassBase
+                    new()
                     {
                         Name = "name"
                     },
@@ -24,7 +24,7 @@ namespace JsonKnownTypes.UnitTests
                         Name = "name1",
                         Children = new List<ClassWithClassBase>
                         {
-                            new ClassWithClassBase
+                            new()
                             {
                                 Name = "name12"
                             }
@@ -55,7 +55,7 @@ namespace JsonKnownTypes.UnitTests
 
     public class ClassWithClass : ClassWithClassBase
     {
-        public List<ClassWithClassBase> Children { get; set; } = new List<ClassWithClassBase>();
+        public List<ClassWithClassBase> Children { get; set; } = new();
     }
 
 }
