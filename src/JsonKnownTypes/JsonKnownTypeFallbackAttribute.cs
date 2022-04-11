@@ -5,8 +5,7 @@ namespace JsonKnownTypes
     /// <summary>
     /// Adds fallback type when type lookup fails.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class)]
-    [AttributeUsage(AttributeTargets.Interface)]
+    [AttributeUsage(AttributeTargets.All)]
     public class JsonKnownTypeFallbackAttribute : Attribute
     {
         public Type FallbackType { get; }
