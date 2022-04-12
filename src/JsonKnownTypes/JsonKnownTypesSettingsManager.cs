@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using JsonKnownTypes.Utils;
 
@@ -25,9 +24,9 @@ namespace JsonKnownTypes
 
             var discriminatorSettings = discriminatorAttribute == null 
                 ? DefaultDiscriminatorSettings 
-                : Mapper.Map(discriminatorAttribute);
+                : Mapper.Map(discriminatorAttribute, DefaultDiscriminatorSettings);
 
-            var typeSettings = new DiscriminatorValues(typeof(T), discriminatorSettings.DiscriminatorFieldName);
+            var typeSettings = new DiscriminatorValues(typeof(T), discriminatorSettings.DiscriminatorFieldName, discriminatorSettings.UseBaseTypeForCanConvert);
 
             typeSettings.AddJsonKnown<T>();
 

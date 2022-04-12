@@ -15,7 +15,7 @@ namespace JsonKnownTypes.UnitTests
             var discriminatorFieldName = "discriminator";
             var expectedBaseType = typeof(TestRecord);
             
-            var discriminatorValues = new DiscriminatorValues(expectedBaseType, discriminatorFieldName);
+            var discriminatorValues = new DiscriminatorValues(expectedBaseType, discriminatorFieldName, false);
 
             Assert.AreEqual(discriminatorFieldName, discriminatorValues.FieldName);
             Assert.AreEqual(expectedBaseType, discriminatorValues.BaseType);
@@ -24,7 +24,7 @@ namespace JsonKnownTypes.UnitTests
         [Test]
         public void GetCorrectTypeAndDiscriminator()
         {   
-            var discriminatorValues = new DiscriminatorValues(typeof(TestRecord), "name");
+            var discriminatorValues = new DiscriminatorValues(typeof(TestRecord), "name", false);
 
             discriminatorValues.AddType(typeof(TestHeir), nameof(TestHeir));
 
@@ -41,7 +41,7 @@ namespace JsonKnownTypes.UnitTests
         [Test]
         public void GetCorrectFallbackType()
         {
-            var discriminatorValues = new DiscriminatorValues(typeof(TestRecord), "name");
+            var discriminatorValues = new DiscriminatorValues(typeof(TestRecord), "name", false);
 
             discriminatorValues.AddType(typeof(TestRecord), nameof(TestRecord));
             discriminatorValues.AddFallbackType(typeof(TestFallback));
@@ -57,7 +57,7 @@ namespace JsonKnownTypes.UnitTests
         [Test]
         public void CorrectContains()
         {
-            var discriminatorValues = new DiscriminatorValues(typeof(TestRecord), "name");
+            var discriminatorValues = new DiscriminatorValues(typeof(TestRecord), "name", false);
 
             discriminatorValues.AddType(typeof(TestRecord), nameof(TestRecord));
 
@@ -69,7 +69,7 @@ namespace JsonKnownTypes.UnitTests
         [Test]
         public void IncorrectContains()
         {
-            var discriminatorValues = new DiscriminatorValues(typeof(TestRecord), "name");
+            var discriminatorValues = new DiscriminatorValues(typeof(TestRecord), "name", false);
 
             discriminatorValues.AddType(typeof(TestRecord), nameof(TestRecord));
 
