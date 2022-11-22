@@ -112,12 +112,13 @@ Json representation:
 { ... , "$type":"just_joke=)" }
 ```
 ### Configuration
-To change default discriminator settings use:
+To change global default discriminator settings use:
 ```c#
 JsonKnownTypesSettingsManager.DefaultDiscriminatorSettings = new JsonDiscriminatorSettings
 {
     DiscriminatorFieldName = "name",
-    UseClassNameAsDiscriminator = false
+    UseClassNameAsDiscriminator = false,
+    NameDiscriminatorResolver = type => type.FullName
 };
 ```
 > `DiscriminatorFieldName` change default `"$type"` name to yours  
@@ -141,6 +142,19 @@ var entityJson = JsonConvert.SerializeObject(entity, converter);
 var obj = DeserializeObject<BaseClass>(entityJson, converter)
 ```
 > You have to pass a converter directly to method if you do not use `JsonConverter` attribute.
+
+
+To change type specific discriminator settings use:
+```c#
+JsonKnownTypesSettingsManager<BaseClass>.DefaultDiscriminatorSettings = new JsonDiscriminatorSettings
+{
+    DiscriminatorFieldName = "name",
+    UseClassNameAsDiscriminator = false,
+    NameDiscriminatorResolver = type => type.FullName
+};
+```
+Type specific configuration overrules the global default settings, and can be used to inject type specific configuration without using attributes
+
 ### Fallback type deserialization
 Normally you will receive an exception during deserialization of models marked with unknown or
 unspecified type discriminator. If you need an exception-free way you can use `JsonKnownTypeFallback` attribute.
