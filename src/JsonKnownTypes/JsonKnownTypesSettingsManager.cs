@@ -1,17 +1,24 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using JsonKnownTypes.Utils;
 
 namespace JsonKnownTypes
 {
+    public static class JsonKnownTypesSettingsManager<T>
+    {
+        /// <summary>
+        /// Type specific default settings for discriminator
+        /// </summary>
+        // ReSharper disable once StaticMemberInGenericType - Justification: Intentional property should exist on a per-type base
+        public static JsonDiscriminatorSettings DefaultDiscriminatorSettings { get; } = new();
+    }
+
     public static class JsonKnownTypesSettingsManager
     {
         /// <summary>
-        /// Default settings for discriminator
+        /// Global Default settings for discriminator
         /// </summary>
-        public static JsonDiscriminatorSettings DefaultDiscriminatorSettings { get; set; } =
-            new JsonDiscriminatorSettings();
+        public static JsonDiscriminatorSettings DefaultDiscriminatorSettings { get; set; } = new();
 
         /// <summary>
         /// Function for search derived classes (By default in base class assembly only)
@@ -23,8 +30,9 @@ namespace JsonKnownTypes
         {
             var discriminatorAttribute = AttributesManager.GetJsonDiscriminatorAttribute(typeof(T));
 
-            var discriminatorSettings = discriminatorAttribute == null 
-                ? DefaultDiscriminatorSettings 
+            var discriminatorSettings = discriminatorAttribute == null
+                ? JsonKnownTypesSettingsManager<T>.DefaultDiscriminatorSettings
+                  ??  DefaultDiscriminatorSettings
                 : Mapper.Map(discriminatorAttribute);
 
             var typeSettings = new DiscriminatorValues(typeof(T), discriminatorSettings.DiscriminatorFieldName);
@@ -36,7 +44,7 @@ namespace JsonKnownTypes
 
             if (discriminatorSettings.UseClassNameAsDiscriminator)
             {
-                typeSettings.AddAutoDiscriminators(allTypes);
+                typeSettings.AddAutoDiscriminators(allTypes, discriminatorSettings.NameDiscriminatorResolver);
             }
 
             return typeSettings;

@@ -33,14 +33,14 @@ namespace JsonKnownTypes
             }
         }
 
-        internal static void AddAutoDiscriminators(this DiscriminatorValues discriminatorValues, Type[] inherited)
+        internal static void AddAutoDiscriminators(this DiscriminatorValues discriminatorValues, Type[] inherited, Func<Type, string> nameResolver)
         {
             foreach (var type in inherited)
             {
                 if (discriminatorValues.Contains(type))
                     continue;
-
-                discriminatorValues.AddType(type, type.Name);
+                
+                discriminatorValues.AddType(type, nameResolver(type));
             }
         }
     }
