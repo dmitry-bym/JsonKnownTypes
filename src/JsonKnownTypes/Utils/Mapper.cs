@@ -2,13 +2,15 @@
 {
     internal static class Mapper
     {
-        internal static JsonDiscriminatorSettings Map(JsonDiscriminatorAttribute entity)
+        internal static JsonDiscriminatorSettings Map(JsonDiscriminatorAttribute entity, JsonDiscriminatorSettings defaultSettings)
         {
-            var settings = new JsonDiscriminatorSettings();
+            var settings = new JsonDiscriminatorSettings
+            {
+                DiscriminatorFieldName = entity.Name ?? defaultSettings.DiscriminatorFieldName,
+                UseClassNameAsDiscriminator = entity.AutoJson ?? defaultSettings.UseClassNameAsDiscriminator,
+                UseBaseTypeForCanConvert = entity.UseBaseType ?? defaultSettings.UseBaseTypeForCanConvert
+            };
 
-            settings.DiscriminatorFieldName = entity.Name ?? settings.DiscriminatorFieldName;
-            settings.UseClassNameAsDiscriminator = entity.AutoJson ?? settings.UseClassNameAsDiscriminator;
-            
             return settings;
         }
     }

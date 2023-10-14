@@ -21,7 +21,9 @@ namespace JsonKnownTypes
         }
         
         public override bool CanConvert(Type objectType)
-            => TypesDiscriminatorValues.Contains(objectType);
+        {
+            return TypesDiscriminatorValues.CanConvert(objectType);
+        }
 
         private readonly ThreadLocal<bool> _isInRead = new ThreadLocal<bool>();
 

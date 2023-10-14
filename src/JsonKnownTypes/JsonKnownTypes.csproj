@@ -10,10 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="\"/>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
   <PropertyGroup>
@@ -21,11 +19,11 @@
     <Version>0.5.2</Version>
     <Authors>Dmitry Kaznacheev</Authors>
     <PackageProjectUrl>https://github.com/dmitry-bym/JsonKnownTypes</PackageProjectUrl>
-    <PackageLicenseUrl></PackageLicenseUrl>
     <Copyright>Dmitry Kaznacheev</Copyright>
     <RepositoryUrl>https://github.com/dmitry-bym/JsonKnownTypes</RepositoryUrl>
     <PackageTags>json known polymorphic types</PackageTags>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
 </Project>

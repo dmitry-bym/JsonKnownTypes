@@ -10,13 +10,20 @@ namespace JsonKnownTypes
         public Type BaseType { get; }
         private readonly Dictionary<string, Type> _discriminatorToType;
         private readonly Dictionary<Type, string> _typeToDiscriminator;
+        private readonly bool _useBaseTypeForCanConvert;
 
-        public DiscriminatorValues(Type baseType, string fieldName)
+        public DiscriminatorValues(Type baseType, string fieldName, bool useBaseTypeForCanConvert)
         {
             BaseType = baseType;
             FieldName = fieldName;
+            _useBaseTypeForCanConvert = useBaseTypeForCanConvert;
             _discriminatorToType = new Dictionary<string, Type>();
             _typeToDiscriminator = new Dictionary<Type, string>();
+        }
+
+        public bool CanConvert(Type type)
+        {
+            return _useBaseTypeForCanConvert ? type == BaseType : Contains(type);
         }
 
         public Type FallbackType { get; private set; }
