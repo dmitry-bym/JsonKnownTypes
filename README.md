@@ -10,6 +10,9 @@ Helps to serialize and deserialize polymorphic types. Adds discriminator to json
 - [How to help us?](#How-to-help-us)
 - [License](#License)
 
+### Comparison with other solutions
+Check this issue https://github.com/dmitry-bym/JsonKnownTypes/issues/35
+
 ## Swashbuckle Support
 To add discriminator to swagger(OpenAPI) scheme use this package [JsonKnownTypes.Swashbuckle](https://github.com/dmitry-bym/JsonKnownTypes.Swashbuckle)
 
